@@ -68,14 +68,14 @@ class Myprofile(models.Model):
         ('California', 'California'),
     ]
     
-    photo = models.ImageField(upload_to='Myprofile/Image')
+    photo = models.ImageField(upload_to='Myprofile/Images')
     employee_Name = models.CharField(max_length=80, blank=True, null=True)
     website = models.URLField()
     email = models.EmailField(max_length=254, blank=True, null=True)
     company_size = models.IntegerField()
     Founded_date = models.DateField(auto_now_add=True)
     category = models.CharField(max_length=90,blank=True, null=True)
-    phone_number = models.IntegerField()
+    phone_number = models.CharField(max_length=10)
     about_company = models.TextField(max_length=160,blank=True, null=True)
     address = models.TextField(max_length=180,blank=True, null=True)
     country = models.CharField(max_length=90, choices=Countries_Choices)
@@ -183,7 +183,7 @@ class AccountSettings(models.Model):
     firstname = models.CharField(max_length=70,blank=True, null=True)
     lastname = models.CharField(max_length=70,blank=True, null=True)
     email = models.EmailField(max_length=40,blank=True, null=True)
-    phonenumber = models.IntegerField()
+    phone_number = models.CharField(max_length=10)
 
 class Changepassword(models.Model):
     old_password = models.CharField(max_length=90,blank=True, null=True)
