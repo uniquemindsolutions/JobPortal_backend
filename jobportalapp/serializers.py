@@ -94,7 +94,7 @@ class MyprofileSerializer(serializers.ModelSerializer):
 class NewjobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Newjob
-        fileds = "__all__"
+        fields = "__all__"
 class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountSettings
