@@ -13,7 +13,7 @@ router.register(r'countries', CountryViewSet,basename='countries'),
 router.register(r'states', StateViewSet,basename='states'),
 router.register(r'cities', CityViewSet,basename='cities'),
 router.register(r'myprofile',MyprofileViewSet,basename='myprofileview'),
-router.register(r'mynewjob',Mynewjobviewset,basename='mynewjob'),
+router.register(r'submitjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
 
 urlpatterns = [

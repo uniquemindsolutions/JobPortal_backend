@@ -75,9 +75,9 @@ class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
-class Mynewjobviewset(viewsets.ModelViewSet):
-    queryset = Newjob.objects.all()
-    serializer_class = NewjobSerializer 
+class Submitjobviewset(viewsets.ModelViewSet):
+    queryset = Submitjob.objects.all()
+    serializer_class = SubmitjobSerializer 
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)

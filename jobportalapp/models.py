@@ -78,7 +78,7 @@ class Myprofile(models.Model):
     zip_code = models.IntegerField()
     map_location = models.CharField(max_length=100,blank=True, null=True)
 
-class Newjob(models.Model):
+class Submitjob(models.Model):
     Job_Category_Choices = [
         ('Ui Developer', 'Ui Developer'),
         ('React', 'React'),
@@ -127,33 +127,6 @@ class Newjob(models.Model):
         ('Excellent', 'Excellent'),
     ]
 
-    # Choices for Country, City, and State (linked with respective city and state)
-    Country_Choices = [
-        ('India', 'India'),
-        ('Canada', 'Canada'),
-        ('USA', 'USA'),
-        ('UK', 'UK'),
-        ('Germany', 'Germany'),
-        # Add more countries as needed
-    ]
-
-    City_Choices = [
-        ('Hyderabad', 'Hyderabad'),
-        ('Bangalore', 'Bangalore'),
-        ('Mumbai', 'Mumbai'),
-        ('Sacramento', 'Sacramento'),
-        ('Albany', 'Albany'),
-        ('Toronto', 'Toronto'),
-        # Add more cities as needed
-    ]
-
-    State_Choices = [
-        ('Telangana', 'TS'),
-        ('Karnataka', 'KA'),
-        ('Maharashtra', 'MH')
-        # Add more states as needed
-    ]
-
     jobtitle = models.CharField(max_length=100,blank=True, null=True)
     jobdescription = models.TextField()
     jobCategory = models.CharField(max_length=100, choices=Job_Category_Choices)
@@ -168,9 +141,9 @@ class Newjob(models.Model):
     english_fluency = models.CharField(max_length=90, choices=English_Fluency_Choices)
     upload_file = models.FileField(upload_to='JobDetails/File')
     address = models.TextField()
-    country = models.CharField(max_length=100, choices=Country_Choices)
-    city = models.CharField(max_length=100, choices=City_Choices)
-    state = models.CharField(max_length=100, choices=State_Choices)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
     map_location = models.CharField(max_length=100,blank=True, null=True)
 
 class AccountSettings(models.Model):

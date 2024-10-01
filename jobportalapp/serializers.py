@@ -110,9 +110,9 @@ class MyprofileSerializer(serializers.ModelSerializer):
         model = Myprofile
         fields = "__all__"
 
-class NewjobSerializer(serializers.ModelSerializer):
+class SubmitjobSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Newjob
+        model = Submitjob
         fields = "__all__"
 class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
