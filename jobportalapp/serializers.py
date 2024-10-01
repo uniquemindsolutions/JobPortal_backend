@@ -101,33 +101,14 @@ class CitySerializer(serializers.ModelSerializer):
         fields =  "__all__"
 
 class MyprofileSerializer(serializers.ModelSerializer):
-    country = CountrySerializer()
-    state = StateSerializer()
-    city = CitySerializer()
+    # Use PrimaryKeyRelatedField to specify the foreign keys using their IDs
+    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
+    state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all())
+    city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all())
 
     class Meta:
         model = Myprofile
         fields = "__all__"
-
-    # Override create to handle nested data
-    def create(self, validated_data):
-        country_data = validated_data.pop('country')
-        state_data = validated_data.pop('state')
-        city_data = validated_data.pop('city')
-
-        # Get or create country
-        country, created = Country.objects.get_or_create(**country_data)
-
-        # Get or create state
-        state, created = State.objects.get_or_create(country=country, **state_data)
-
-        # Get or create city
-        city, created = City.objects.get_or_create(state=state, **city_data)
-
-        # Create profile with references to country, state, and city
-        profile = Myprofile.objects.create(country=country, state=state, city=city, **validated_data)
-
-        return profile
 
 class NewjobSerializer(serializers.ModelSerializer):
     class Meta:
