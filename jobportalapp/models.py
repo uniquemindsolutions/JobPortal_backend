@@ -62,7 +62,7 @@ class City(models.Model):
         
 class Myprofile(models.Model):
 
-    photo = models.ImageField(upload_to='Myprofile/Images')
+    photo = models.ImageField(upload_to='Myprofile/Images',blank=True, null=True)
     employee_Name = models.CharField(max_length=80, blank=True, null=True)
     website = models.URLField()
     email = models.EmailField(max_length=254, blank=True, null=True)
