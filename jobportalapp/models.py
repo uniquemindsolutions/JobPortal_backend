@@ -80,10 +80,30 @@ class Myprofile(models.Model):
 
 class Submitjob(models.Model):
     Job_Category_Choices = [
-        ('Ui Developer', 'Ui Developer'),
-        ('React', 'React'),
-        ('Angular', 'Angular')
+    ('Ui Developer', 'Ui Developer'),
+    ('React', 'React'),
+    ('Angular', 'Angular'),
+    ('Backend Developer', 'Backend Developer'),
+    ('Full Stack Developer', 'Full Stack Developer'),
+    ('Data Scientist', 'Data Scientist'),
+    ('DevOps Engineer', 'DevOps Engineer'),
+    ('Mobile Developer', 'Mobile Developer'),
+    ('Web Designer', 'Web Designer'),
+    ('Software Engineer', 'Software Engineer'),
+    ('Quality Assurance', 'Quality Assurance'),
+    ('System Analyst', 'System Analyst'),
+    ('Database Administrator', 'Database Administrator'),
+    ('Network Engineer', 'Network Engineer'),
+    ('Cloud Engineer', 'Cloud Engineer'),
+    ('Project Manager', 'Project Manager'),
+    ('Product Manager', 'Product Manager'),
+    ('Technical Writer', 'Technical Writer'),
+    ('Cybersecurity Analyst', 'Cybersecurity Analyst'),
+    ('Business Analyst', 'Business Analyst'),
+    ('Game Developer', 'Game Developer'),
+    ('AI Engineer', 'AI Engineer')
     ]
+   
     Job_Type_Choices = [
         ('Full Time', 'Full Time'),
         ('Part Time', 'Part Time'),
@@ -101,24 +121,56 @@ class Submitjob(models.Model):
         ('No Experience', 'No Experience')
     ]
     
-    # Choices for Location (State and Capital Cities)
-    Location_Choices = [
-        ('Hyderabad TS', 'Hyderabad TS'),
-        ('Bangalore KT ', 'Bangalore KT '),
-        ('Mumbai MH','Mumbai MH'),
-        ('Delhi DL','Delhi DL'),
-        # Add more states and capital cities as needed
-    ]
-
     # Choices for Industry
     Industry_Choices = [
-        ('IT', 'IT'),
-        ('Marketing', 'Marketing'),
-        ('Software Industry', 'Software Industry'),
-        ('Healthcare', 'Healthcare'),
-        ('Finance', 'Finance'),
-        # Add more industries as needed
-    ]
+    ('IT', 'IT'),
+    ('Marketing', 'Marketing'),
+    ('Software Industry', 'Software Industry'),
+    ('Healthcare', 'Healthcare'),
+    ('Finance', 'Finance'),
+    ('Education', 'Education'),
+    ('Manufacturing', 'Manufacturing'),
+    ('Retail', 'Retail'),
+    ('Hospitality', 'Hospitality'),
+    ('Real Estate', 'Real Estate'),
+    ('Telecommunications', 'Telecommunications'),
+    ('Construction', 'Construction'),
+    ('Transportation', 'Transportation'),
+    ('Energy', 'Energy'),
+    ('Legal', 'Legal'),
+    ('Aerospace', 'Aerospace'),
+    ('Agriculture', 'Agriculture'),
+    ('Automotive', 'Automotive'),
+    ('Biotechnology', 'Biotechnology'),
+    ('Media & Entertainment', 'Media & Entertainment'),
+    ('Consulting', 'Consulting'),
+    ('E-commerce', 'E-commerce'),
+    ('Government', 'Government'),
+    ('Human Resources', 'Human Resources'),
+    ('Insurance', 'Insurance'),
+    ('Nonprofit', 'Nonprofit'),
+    ('Pharmaceutical', 'Pharmaceutical'),
+    ('Public Relations', 'Public Relations'),
+    ('Supply Chain', 'Supply Chain'),
+    ('Tourism', 'Tourism'),
+    ('Food & Beverage', 'Food & Beverage'),
+    ('Environmental Services', 'Environmental Services'),
+    ('Mining', 'Mining'),
+    ('Textile', 'Textile'),
+    ('Security Services', 'Security Services'),
+    ('Fitness & Wellness', 'Fitness & Wellness'),
+    ('Logistics', 'Logistics'),
+    ('Venture Capital', 'Venture Capital'),
+    ('Architecture', 'Architecture'),
+    ('Event Management', 'Event Management'),
+    ('Fashion', 'Fashion'),
+    ('Sports', 'Sports'),
+    ('Renewable Energy', 'Renewable Energy'),
+    ('Research & Development', 'Research & Development'),
+    ('Shipping', 'Shipping'),
+    ('Gaming', 'Gaming'),
+    ('Electronics', 'Electronics')
+]
 
     # Choices for English Fluency
     English_Fluency_Choices = [
@@ -127,8 +179,10 @@ class Submitjob(models.Model):
         ('Excellent', 'Excellent'),
     ]
 
-    jobtitle = models.CharField(max_length=100,blank=True, null=True)
+    jobtitle = models.CharField(max_length=100, blank=True, null=True)
+    number_of_positions = models.IntegerField(default=0)
     jobdescription = models.TextField()
+    industry = models.CharField(max_length=50, choices=Industry_Choices)
     jobCategory = models.CharField(max_length=100, choices=Job_Category_Choices)
     jobtype = models.CharField(max_length=40, choices=Job_Type_Choices)
     salary = models.CharField(max_length=50, choices=Salary_Choices)
@@ -136,15 +190,15 @@ class Submitjob(models.Model):
     max_salary = models.IntegerField()
     skills = models.CharField(max_length=50, blank=True, null=True)
     experience = models.CharField(max_length=50, choices=Experience_Choices)
-    location = models.CharField(max_length=100, choices=Location_Choices)
-    Industry = models.CharField(max_length=50, choices=Industry_Choices)
+    location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')
     english_fluency = models.CharField(max_length=90, choices=English_Fluency_Choices)
     upload_file = models.FileField(upload_to='JobDetails/File')
     address = models.TextField()
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
-    map_location = models.CharField(max_length=100,blank=True, null=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='job_city_set')
+    map_location = models.CharField(max_length=100, blank=True, null=True)
+
 
 class AccountSettings(models.Model):
     firstname = models.CharField(max_length=70,blank=True, null=True)
