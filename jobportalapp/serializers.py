@@ -78,7 +78,7 @@ class Profile_ViewsSerializer(serializers.ModelSerializer):
 
 class AppliedjobsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Appliedjobs
+        model = AppliedJobs
         fields = "__all__"
 
 class JobViewSerializer(serializers.ModelSerializer):
@@ -88,17 +88,17 @@ class JobViewSerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields =  "__all__"
+        fields =  ['name']
 
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
-        fields =  "__all__"
+        fields =  ['name','country']
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
-        fields =  "__all__"
+        fields =  ['name','state']
 
 class MyprofileSerializer(serializers.ModelSerializer):
     # Use PrimaryKeyRelatedField to specify the foreign keys using their IDs
@@ -107,18 +107,68 @@ class MyprofileSerializer(serializers.ModelSerializer):
     city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all())
 
     class Meta:
-        model = Myprofile
+        model = MyProfile
         fields = "__all__"
 
-class SubmitjobSerializer(serializers.ModelSerializer):
+class JobCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Submitjob
+        model = JobCategory
+        fields = ['job_category']
+
+
+class IndustrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Industry
+        fields = ['industry']
+
+class SubmitjobSerializer(serializers.ModelSerializer):
+    industry = IndustrySerializer()  # Nested serializer for industry
+    job_category = JobCategorySerializer()  # Nested serializer for jobCategory
+    class Meta:
+        model = SubmitJob
         fields = "__all__"
+
+    def create(self, validated_data):
+        # Extract the nested objects
+        industry_data = validated_data.pop('industry')
+        job_category_data = validated_data.pop('job_category')
+
+        # Create the industry and job_category instances
+        industry, created = Industry.objects.get_or_create(**industry_data)
+        job_category, created = JobCategory.objects.get_or_create(**job_category_data)
+
+        # Create the SubmitJob instance
+        submit_job = SubmitJob.objects.create(
+            industry=industry,
+            job_category=job_category,
+            **validated_data
+        )
+        return submit_job
+
+    def update(self, instance, validated_data):
+        # Similar logic for updating instances
+        industry_data = validated_data.pop('industry', None)
+        job_category_data = validated_data.pop('job_category', None)
+
+        if industry_data:
+            industry, created = Industry.objects.get_or_create(**industry_data)
+            instance.industry = industry
+
+        if job_category_data:
+            job_category, created = JobCategory.objects.get_or_create(**job_category_data)
+            instance.job_category = job_category
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountSettings
         fields = "__all__"
 class ChangepasswordSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Changepassword
+        model = ChangePassword
         fields = "__all__"

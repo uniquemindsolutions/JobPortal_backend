@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django_countries.fields import CountryField
-# Create your models here.
 
+# Model to track total visitor counts
 class TotalVisitorCount(models.Model):
     visitor_count = models.IntegerField()
 
@@ -12,9 +11,11 @@ class TotalVisitorCount(models.Model):
             return f"{self.visitor_count / 1000:.1f}k"
         return str(self.visitor_count)
 
+# Model to track shortlisted candidates
 class Shortlisted_Candidates(models.Model):
     shortlisted_count = models.IntegerField()
 
+# Model to track profile views
 class ProfileViews(models.Model):
     profile_view = models.IntegerField()
 
@@ -24,28 +25,25 @@ class ProfileViews(models.Model):
             return f"{self.profile_view / 1000:.1f}k"
         return str(self.profile_view)
 
-
-class Appliedjobs(models.Model):
+# Model to track applied jobs
+class AppliedJobs(models.Model):
     appliedjobs_count = models.IntegerField()
 
+# Model to store job views
 class JobView(models.Model):
-    JOB_CHOICES = [
-        ('mobile_web_developer', 'Mobile Web Developer'),
-        ('web_developer', 'Web Developer'),
-        ('python_developer', 'Python Developer'),
-        ('react_developer', 'React Developer'),
-    ]
-
-    job_title = models.CharField(max_length=50, choices=JOB_CHOICES)
+    job_title = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.get_job_title_display()
+        return self.job_title
+
+# Model for country
 class Country(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
+# Model for state, linked to a country
 class State(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='states')
@@ -53,160 +51,100 @@ class State(models.Model):
     def __str__(self):
         return self.name
 
+# Model for city, linked to a state
 class City(models.Model):
     name = models.CharField(max_length=100)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='cities')
 
     def __str__(self):
         return self.name
-        
-class Myprofile(models.Model):
 
-    photo = models.ImageField(upload_to='Myprofile/Images',blank=True, null=True)
-    employee_Name = models.CharField(max_length=80, blank=True, null=True)
+# Profile model with foreign keys to Country, State, and City
+class MyProfile(models.Model):
+    photo = models.ImageField(upload_to='MyProfile/Images', blank=True, null=True)
+    employee_name = models.CharField(max_length=80)
     website = models.URLField()
-    email = models.EmailField(max_length=254, blank=True, null=True)
+    email = models.EmailField(max_length=254)
     company_size = models.IntegerField()
-    Founded_date = models.DateField(auto_now_add=True)
-    category = models.CharField(max_length=90,blank=True, null=True)
+    founded_date = models.DateField(auto_now_add=True)
+    category = models.CharField(max_length=90)
     phone_number = models.CharField(max_length=10)
-    about_company = models.TextField(max_length=160,blank=True, null=True)
-    address = models.TextField(max_length=180,blank=True, null=True)
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
-    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
+    about_company = models.TextField(max_length=160)
+    address = models.TextField(max_length=180)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
     zip_code = models.IntegerField()
-    map_location = models.CharField(max_length=100,blank=True, null=True)
+    map_location = models.CharField(max_length=100, blank=True, null=True)
 
-class Submitjob(models.Model):
-    Job_Category_Choices = [
-    ('Ui Developer', 'Ui Developer'),
-    ('React', 'React'),
-    ('Angular', 'Angular'),
-    ('Backend Developer', 'Backend Developer'),
-    ('Full Stack Developer', 'Full Stack Developer'),
-    ('Data Scientist', 'Data Scientist'),
-    ('DevOps Engineer', 'DevOps Engineer'),
-    ('Mobile Developer', 'Mobile Developer'),
-    ('Web Designer', 'Web Designer'),
-    ('Software Engineer', 'Software Engineer'),
-    ('Quality Assurance', 'Quality Assurance'),
-    ('System Analyst', 'System Analyst'),
-    ('Database Administrator', 'Database Administrator'),
-    ('Network Engineer', 'Network Engineer'),
-    ('Cloud Engineer', 'Cloud Engineer'),
-    ('Project Manager', 'Project Manager'),
-    ('Product Manager', 'Product Manager'),
-    ('Technical Writer', 'Technical Writer'),
-    ('Cybersecurity Analyst', 'Cybersecurity Analyst'),
-    ('Business Analyst', 'Business Analyst'),
-    ('Game Developer', 'Game Developer'),
-    ('AI Engineer', 'AI Engineer')
-    ]
-   
-    Job_Type_Choices = [
+# Job category model
+class JobCategory(models.Model):
+    job_category = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.job_category
+
+# Industry model
+class Industry(models.Model):
+    industry = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.industry
+
+# Submit job model with all the necessary details
+class SubmitJob(models.Model):
+    JOB_TYPE_CHOICES = [
         ('Full Time', 'Full Time'),
         ('Part Time', 'Part Time'),
         ('Hourly-Contract', 'Hourly Contract'),
-        ('Fixed-Price','Frice-Price')
+        ('Fixed-Price', 'Fixed-Price')
     ]
-    Salary_Choices = [
+    SALARY_CHOICES = [
         ('Monthly', 'Monthly'),
         ('Weekly', 'Weekly'),
     ]
-    # Choices for Experience
-    Experience_Choices = [
+    EXPERIENCE_CHOICES = [
         ('Expert', 'Expert'),
         ('Intermediate', 'Intermediate'),
         ('No Experience', 'No Experience')
     ]
-    
-    # Choices for Industry
-    Industry_Choices = [
-    ('IT', 'IT'),
-    ('Marketing', 'Marketing'),
-    ('Software Industry', 'Software Industry'),
-    ('Healthcare', 'Healthcare'),
-    ('Finance', 'Finance'),
-    ('Education', 'Education'),
-    ('Manufacturing', 'Manufacturing'),
-    ('Retail', 'Retail'),
-    ('Hospitality', 'Hospitality'),
-    ('Real Estate', 'Real Estate'),
-    ('Telecommunications', 'Telecommunications'),
-    ('Construction', 'Construction'),
-    ('Transportation', 'Transportation'),
-    ('Energy', 'Energy'),
-    ('Legal', 'Legal'),
-    ('Aerospace', 'Aerospace'),
-    ('Agriculture', 'Agriculture'),
-    ('Automotive', 'Automotive'),
-    ('Biotechnology', 'Biotechnology'),
-    ('Media & Entertainment', 'Media & Entertainment'),
-    ('Consulting', 'Consulting'),
-    ('E-commerce', 'E-commerce'),
-    ('Government', 'Government'),
-    ('Human Resources', 'Human Resources'),
-    ('Insurance', 'Insurance'),
-    ('Nonprofit', 'Nonprofit'),
-    ('Pharmaceutical', 'Pharmaceutical'),
-    ('Public Relations', 'Public Relations'),
-    ('Supply Chain', 'Supply Chain'),
-    ('Tourism', 'Tourism'),
-    ('Food & Beverage', 'Food & Beverage'),
-    ('Environmental Services', 'Environmental Services'),
-    ('Mining', 'Mining'),
-    ('Textile', 'Textile'),
-    ('Security Services', 'Security Services'),
-    ('Fitness & Wellness', 'Fitness & Wellness'),
-    ('Logistics', 'Logistics'),
-    ('Venture Capital', 'Venture Capital'),
-    ('Architecture', 'Architecture'),
-    ('Event Management', 'Event Management'),
-    ('Fashion', 'Fashion'),
-    ('Sports', 'Sports'),
-    ('Renewable Energy', 'Renewable Energy'),
-    ('Research & Development', 'Research & Development'),
-    ('Shipping', 'Shipping'),
-    ('Gaming', 'Gaming'),
-    ('Electronics', 'Electronics')
-]
-
-    # Choices for English Fluency
-    English_Fluency_Choices = [
+    ENGLISH_FLUENCY_CHOICES = [
         ('Basic', 'Basic'),
         ('Medium', 'Medium'),
         ('Excellent', 'Excellent'),
     ]
 
-    jobtitle = models.CharField(max_length=100, blank=True, null=True)
+    job_title = models.CharField(max_length=100)  # Required
     number_of_positions = models.IntegerField(default=0)
-    jobdescription = models.TextField()
-    industry = models.CharField(max_length=50, choices=Industry_Choices)
-    jobCategory = models.CharField(max_length=100, choices=Job_Category_Choices)
-    jobtype = models.CharField(max_length=40, choices=Job_Type_Choices)
-    salary = models.CharField(max_length=50, choices=Salary_Choices)
-    min_salary = models.IntegerField()
-    max_salary = models.IntegerField()
-    skills = models.CharField(max_length=50, blank=True, null=True)
-    experience = models.CharField(max_length=50, choices=Experience_Choices)
-    location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')
-    english_fluency = models.CharField(max_length=90, choices=English_Fluency_Choices)
-    upload_file = models.FileField(upload_to='JobDetails/File')
-    address = models.TextField()
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
-    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='job_city_set')
-    map_location = models.CharField(max_length=100, blank=True, null=True)
+    job_description = models.TextField()  # Required
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
+    job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
+    job_type = models.CharField(max_length=40, choices=JOB_TYPE_CHOICES)  
+    salary = models.CharField(max_length=50, choices=SALARY_CHOICES)  
+    min_salary = models.IntegerField(blank=True, null=True)  # Optional
+    max_salary = models.IntegerField(blank=True, null=True)  # Optional
+    skills = models.CharField(max_length=50, blank=True, null=True)  # Required
+    experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES, blank=True, null=True)  # Required
+    location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
+    english_fluency = models.CharField(max_length=90, choices=ENGLISH_FLUENCY_CHOICES,null=True, blank=True)  # Optional
+    upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
+    address = models.TextField()  # Required
+    country = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True)  # Required
+    state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True)  # Required
+    city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_city_set')  # Required
+    map_location = models.CharField(max_length=100, blank=True, null=True)  # Optional
 
+    def __str__(self):
+        return self.job_title
 
+# Account settings model for user profile
 class AccountSettings(models.Model):
     firstname = models.CharField(max_length=70,blank=True, null=True)
     lastname = models.CharField(max_length=70,blank=True, null=True)
     email = models.EmailField(max_length=40,blank=True, null=True)
     phone_number = models.CharField(max_length=10)
 
-class Changepassword(models.Model):
+class ChangePassword(models.Model):
     old_password = models.CharField(max_length=90,blank=True, null=True)
     new_password = models.CharField(max_length=90,blank=True, null=True)
     confirm_password = models.CharField(max_length=90, blank=True, null=True)
