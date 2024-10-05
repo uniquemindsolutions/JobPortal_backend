@@ -113,13 +113,13 @@ class MyprofileSerializer(serializers.ModelSerializer):
 class JobCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = JobCategory
-        fields = ['job_category']
+        fields = "__all__"
 
 
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Industry
-        fields = ['industry']
+        fields = "__all__"
 
 class SubmitjobSerializer(serializers.ModelSerializer):
     industry = IndustrySerializer()  # Nested serializer for industry
