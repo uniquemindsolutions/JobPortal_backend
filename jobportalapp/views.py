@@ -48,7 +48,7 @@ class Profile_ViewsViewSet(viewsets.ModelViewSet):
     serializer_class = Profile_ViewsSerializer
 
 class AppliedjobsViewSet(viewsets.ModelViewSet):
-    queryset = Appliedjobs.objects.all()
+    queryset = AppliedJobs.objects.all()
     serializer_class = AppliedjobsSerializer
 
 class JobViewViewSet(viewsets.ModelViewSet):
@@ -56,7 +56,7 @@ class JobViewViewSet(viewsets.ModelViewSet):
     serializer_class = JobViewSerializer
 
 class MyprofileViewSet(viewsets.ModelViewSet):
-    queryset = Myprofile.objects.all()
+    queryset = MyProfile.objects.all()
     serializer_class = MyprofileSerializer
 
     # Override the create method if needed for additional logic
@@ -75,8 +75,17 @@ class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
+class JobCategoryViewSet(viewsets.ModelViewSet):
+    queryset = JobCategory.objects.all()
+    serializer_class = JobCategorySerializer
+
+# ViewSet for Industry
+class IndustryViewSet(viewsets.ModelViewSet):
+    queryset = Industry.objects.all()
+    serializer_class = IndustrySerializer
+
 class Submitjobviewset(viewsets.ModelViewSet):
-    queryset = Submitjob.objects.all()
+    queryset = SubmitJob.objects.all()
     serializer_class = SubmitjobSerializer 
 
     def create(self, request, *args, **kwargs):
