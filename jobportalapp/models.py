@@ -165,6 +165,12 @@ class ChangePassword(models.Model):
     new_password = models.CharField(max_length=90,blank=True, null=True)
     confirm_password = models.CharField(max_length=90, blank=True, null=True)
 
+class UG(models.Model):
+    ug_name = models.CharField(max_length=150, blank=True, null=True)
+
+class PG(models.Model):
+    pg_name = models.CharField(max_length=150, blank=True, null=True)
+
 class Education(models.Model):
     SCHOOLING_CHOICE = [
         ('SSC','SSC')
@@ -174,18 +180,7 @@ class Education(models.Model):
         ('MPC','MPC'),
         ('ÇEC','CEC')
     ]
-    UG_CHOICES = [
-        ('Any Graduate','Any Graduate'),
-        ('Bsc','Bsc'),
-        ('B Com','B Com'),
-        ('BA','BA')
-    ]
-    PG_CHOICES = [
-        ('Any Postgraduate','Any Postgraduate'),
-        ('MBA','MBA'),
-        ('MCA','MCA')
-    ]
     ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE)
     intermediate = models.CharField(max_length=150,choices=INTERMEDIATE_CHOICES)
-    UG = models.CharField(max_length=150,choices=UG_CHOICES)
-    PG = models.CharField(max_length=150,choices=PG_CHOICES)
+    ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
+    pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)
