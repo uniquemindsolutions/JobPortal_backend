@@ -168,7 +168,14 @@ class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountSettings
         fields = "__all__"
+
 class ChangepasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChangePassword
         fields = "__all__"
+
+class EducationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Education
+        fields = "__all__"
+        

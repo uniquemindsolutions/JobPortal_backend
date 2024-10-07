@@ -37,27 +37,37 @@ class JobView(models.Model):
         return self.job_title
 
 # Model for country
+# Model for country
 class Country(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)  # Ensure country name is unique
 
     def __str__(self):
         return self.name
+
 
 # Model for state, linked to a country
 class State(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='states')
 
+    class Meta:
+        unique_together = ('name', 'country')  # Ensure state is unique per country
+
     def __str__(self):
         return self.name
+
 
 # Model for city, linked to a state
 class City(models.Model):
     name = models.CharField(max_length=100)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='cities')
 
+    class Meta:
+        unique_together = ('name', 'state')  # Ensure city is unique per state
+
     def __str__(self):
         return self.name
+
 
 # Profile model with foreign keys to Country, State, and City
 class MyProfile(models.Model):
@@ -113,7 +123,6 @@ class SubmitJob(models.Model):
         ('Medium', 'Medium'),
         ('Excellent', 'Excellent'),
     ]
-
     job_title = models.CharField(max_length=100)  # Required
     number_of_positions = models.IntegerField(default=0)
     job_description = models.TextField()  # Required
@@ -128,11 +137,11 @@ class SubmitJob(models.Model):
     location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
     english_fluency = models.CharField(max_length=90, choices=ENGLISH_FLUENCY_CHOICES,null=True, blank=True)  # Optional
     upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
+    about_company = models.TextField()
     address = models.TextField()  # Required
     country = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True)  # Required
     state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True)  # Required
     city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_city_set')  # Required
-    map_location = models.CharField(max_length=100, blank=True, null=True)  # Optional
 
     def __str__(self):
         return self.job_title
@@ -148,3 +157,24 @@ class ChangePassword(models.Model):
     old_password = models.CharField(max_length=90,blank=True, null=True)
     new_password = models.CharField(max_length=90,blank=True, null=True)
     confirm_password = models.CharField(max_length=90, blank=True, null=True)
+
+class Education(models.Model):
+    INTERMEDIATE_CHOICES = [
+        ('Any Inter','Any Inter'),
+        ('MPC','MPC'),
+        ('ÇEC','CEC')
+    ]
+    UG_CHOICES = [
+        ('Any Graduate','Any Graduate'),
+        ('Bsc','Bsc'),
+        ('B Com','B Com'),
+        ('BA','BA')
+    ]
+    PG_CHOICES = [
+        ('Any Postgraduate','Any Postgraduate'),
+        ('MBA','MBA'),
+        ('MCA','MCA')
+    ]
+    intermediate = models.CharField(max_length=150,choices=INTERMEDIATE_CHOICES)
+    UG = models.CharField(max_length=150,choices=UG_CHOICES)
+    PG = models.CharField(max_length=150,choices=PG_CHOICES)
