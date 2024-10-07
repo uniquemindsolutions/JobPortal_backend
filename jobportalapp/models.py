@@ -123,6 +123,12 @@ class SubmitJob(models.Model):
         ('Medium', 'Medium'),
         ('Excellent', 'Excellent'),
     ]
+    WORK_MODE_CHOICES = [
+        ('Work from office', 'Work from office'),
+        ('Work from Home','Work from Home'),
+        ('Remote', 'Remote'),
+        ('Hybrid', 'Hybrid')
+    ]
     job_title = models.CharField(max_length=100)  # Required
     number_of_positions = models.IntegerField(default=0)
     job_description = models.TextField()  # Required
@@ -136,8 +142,9 @@ class SubmitJob(models.Model):
     experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES, blank=True, null=True)  # Required
     location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
     english_fluency = models.CharField(max_length=90, choices=ENGLISH_FLUENCY_CHOICES,null=True, blank=True)  # Optional
-    upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
+    # upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
     about_company = models.TextField()
+    work_mode =  models.CharField(max_length=50,choices=WORK_MODE_CHOICES)
     address = models.TextField()  # Required
     country = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True)  # Required
     state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True)  # Required
@@ -159,6 +166,9 @@ class ChangePassword(models.Model):
     confirm_password = models.CharField(max_length=90, blank=True, null=True)
 
 class Education(models.Model):
+    SCHOOLING_CHOICE = [
+        ('SSC','SSC')
+    ]
     INTERMEDIATE_CHOICES = [
         ('Any Inter','Any Inter'),
         ('MPC','MPC'),
@@ -175,6 +185,7 @@ class Education(models.Model):
         ('MBA','MBA'),
         ('MCA','MCA')
     ]
+    ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE)
     intermediate = models.CharField(max_length=150,choices=INTERMEDIATE_CHOICES)
     UG = models.CharField(max_length=150,choices=UG_CHOICES)
     PG = models.CharField(max_length=150,choices=PG_CHOICES)
