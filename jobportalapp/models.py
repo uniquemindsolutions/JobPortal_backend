@@ -176,9 +176,18 @@ class Education(models.Model):
         ('SSC','SSC')
     ]
     INTERMEDIATE_CHOICES = [
-        ('Any Inter','Any Inter'),
-        ('MPC','MPC'),
-        ('ÇEC','CEC')
+    ('Any Inter', 'Any Inter'),
+    ('MPC', 'MPC'),
+    ('CEC', 'CEC'),
+    ('BiPC', 'BiPC'),
+    ('HEC', 'HEC'),
+    ('MEC', 'MEC'),
+    ('Vocational', 'Vocational'),
+    ('Commerce', 'Commerce'),
+    ('Arts', 'Arts'),
+    ('Science', 'Science'),
+    ('Diploma', 'Diploma'),
+    ('Other', 'Other')
     ]
     ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE)
     intermediate = models.CharField(max_length=150,choices=INTERMEDIATE_CHOICES)
