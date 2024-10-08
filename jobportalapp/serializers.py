@@ -168,7 +168,32 @@ class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountSettings
         fields = "__all__"
+
 class ChangepasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChangePassword
         fields = "__all__"
+
+class IntermediateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = intermediate
+        fields = "__all__"
+
+class UGSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UG 
+        fields = "__all__"
+
+class PGSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PG 
+        fields = "__all__"
+
+class EducationSerializer(serializers.ModelSerializer):
+    # intermediate = IntermediateSerializer()
+    # ug_name = UGSerializer()
+    # pg_name = PGSerializer()
+    class Meta:
+        model = Education
+        fields = "__all__"
+        

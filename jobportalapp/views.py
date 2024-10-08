@@ -67,13 +67,30 @@ class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
+# For filtering states by country_id
 class StateViewSet(viewsets.ModelViewSet):
     queryset = State.objects.all()
     serializer_class = StateSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        country_id = self.request.query_params.get('countryid', None)
+        if country_id:
+            queryset = queryset.filter(country__id=country_id)
+        return queryset
+
+
+# For filtering cities by state_id
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        state_id = self.request.query_params.get('stateid', None)
+        if state_id:
+            queryset = queryset.filter(state__id=state_id)
+        return queryset
 
 class JobCategoryViewSet(viewsets.ModelViewSet):
     queryset = JobCategory.objects.all()
@@ -113,3 +130,18 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class IntermediateViewSet(viewsets.ModelViewSet):
+    queryset = intermediate.objects.all()
+    serializers_class = IntermediateSerializer
+
+class UGViewet(viewsets.ModelViewSet):
+    queryset = UG.objects.all()
+    serializer_class = UGSerializer
+
+class PGViewset(viewsets.ModelViewSet):
+    querysets = PG.objects.all()
+    serializer_class = PGSerializer 
+
+class EducationViewSet(viewsets.ModelViewSet):
+    queryset = Education.objects.all()
+    serializer_class = EducationSerializer
