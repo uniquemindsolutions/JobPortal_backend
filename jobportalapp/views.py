@@ -139,7 +139,7 @@ class UGViewet(viewsets.ModelViewSet):
     serializer_class = UGSerializer
 
 class PGViewset(viewsets.ModelViewSet):
-    querysets = PG.objects.all()
+    queryset = PG.objects.all()
     serializer_class = PGSerializer 
 
 class EducationViewSet(viewsets.ModelViewSet):
