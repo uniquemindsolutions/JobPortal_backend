@@ -155,15 +155,15 @@ class SubmitJob(models.Model):
 
 # Account settings model for user profile
 class AccountSettings(models.Model):
-    firstname = models.CharField(max_length=70,blank=True, null=True)
-    lastname = models.CharField(max_length=70,blank=True, null=True)
-    email = models.EmailField(max_length=40,blank=True, null=True)
+    firstname = models.CharField(max_length=70)
+    lastname = models.CharField(max_length=70)
+    email = models.EmailField(max_length=40)
     phone_number = models.CharField(max_length=10)
 
 class ChangePassword(models.Model):
-    old_password = models.CharField(max_length=90,blank=True, null=True)
-    new_password = models.CharField(max_length=90,blank=True, null=True)
-    confirm_password = models.CharField(max_length=90, blank=True, null=True)
+    old_password = models.CharField(max_length=90)
+    new_password = models.CharField(max_length=90)
+    confirm_password = models.CharField(max_length=90)
 
 class intermediate(models.Model):
     inter = models.CharField(max_length=120, blank=True, null=True)
@@ -178,7 +178,7 @@ class Education(models.Model):
     SCHOOLING_CHOICE = [
         ('SSC','SSC')
     ]
-    ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE)
+    ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE,null=True, blank=True)
     intermediate = models.ForeignKey(intermediate, on_delete=models.SET_NULL, null=True, blank=True)
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)

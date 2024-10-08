@@ -190,6 +190,9 @@ class PGSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class EducationSerializer(serializers.ModelSerializer):
+    # intermediate = IntermediateSerializer()
+    # ug_name = UGSerializer()
+    # pg_name = PGSerializer()
     class Meta:
         model = Education
         fields = "__all__"
