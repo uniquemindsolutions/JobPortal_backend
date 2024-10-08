@@ -130,6 +130,18 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class IntermediateViewSet(viewsets.ModelViewSet):
+    queryset = intermediate.objects.all()
+    serializers_class = IntermediateSerializer
+
+class UGViewet(viewsets.ModelViewSet):
+    queryset = UG.objects.all()
+    serializer_class = UGSerializer
+
+class PGViewset(viewsets.ModelViewSet):
+    querysets = PG.objects.all()
+    serializer_class = PGSerializer 
+
 class EducationViewSet(viewsets.ModelViewSet):
     queryset = Education.objects.all()
     serializer_class = EducationSerializer

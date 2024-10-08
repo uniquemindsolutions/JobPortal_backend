@@ -165,6 +165,9 @@ class ChangePassword(models.Model):
     new_password = models.CharField(max_length=90,blank=True, null=True)
     confirm_password = models.CharField(max_length=90, blank=True, null=True)
 
+class intermediate(models.Model):
+    inter = models.CharField(max_length=120, blank=True, null=True)
+
 class UG(models.Model):
     ug_name = models.CharField(max_length=150, blank=True, null=True)
 
@@ -175,21 +178,7 @@ class Education(models.Model):
     SCHOOLING_CHOICE = [
         ('SSC','SSC')
     ]
-    INTERMEDIATE_CHOICES = [
-    ('Any Inter', 'Any Inter'),
-    ('MPC', 'MPC'),
-    ('CEC', 'CEC'),
-    ('BiPC', 'BiPC'),
-    ('HEC', 'HEC'),
-    ('MEC', 'MEC'),
-    ('Vocational', 'Vocational'),
-    ('Commerce', 'Commerce'),
-    ('Arts', 'Arts'),
-    ('Science', 'Science'),
-    ('Diploma', 'Diploma'),
-    ('Other', 'Other')
-    ]
     ssc = models.CharField(max_length=150,choices=SCHOOLING_CHOICE)
-    intermediate = models.CharField(max_length=150,choices=INTERMEDIATE_CHOICES)
+    intermediate = models.ForeignKey(intermediate, on_delete=models.SET_NULL, null=True, blank=True)
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)

@@ -174,6 +174,21 @@ class ChangepasswordSerializer(serializers.ModelSerializer):
         model = ChangePassword
         fields = "__all__"
 
+class IntermediateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = intermediate
+        fields = "__all__"
+
+class UGSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UG 
+        fields = "__all__"
+
+class PGSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PG 
+        fields = "__all__"
+
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
