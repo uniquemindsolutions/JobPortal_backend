@@ -17,6 +17,7 @@ router.register(r'industry',IndustryViewSet,basename='industry'),
 router.register(r'myprofile',MyprofileViewSet,basename='myprofileview'),
 router.register(r'submitnewjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
+router.register(r'education',EducationViewSet,basename='education')
 
 urlpatterns = [
     path('', include(router.urls)),
