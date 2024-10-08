@@ -131,8 +131,8 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class IntermediateViewSet(viewsets.ModelViewSet):
-    queryset = intermediate.objects.all()
-    serializers_class = IntermediateSerializer
+    queryset = Intermediate.objects.all()
+    serializer_class = IntermediateSerializer
 
 class UGViewet(viewsets.ModelViewSet):
     queryset = UG.objects.all()

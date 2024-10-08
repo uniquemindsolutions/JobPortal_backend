@@ -176,7 +176,7 @@ class ChangepasswordSerializer(serializers.ModelSerializer):
 
 class IntermediateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = intermediate
+        model = Intermediate  # Make sure the model name is capitalized if needed
         fields = "__all__"
 
 class UGSerializer(serializers.ModelSerializer):
