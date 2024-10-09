@@ -19,8 +19,7 @@ router.register(r'submitnewjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
 router.register(r'education/intermediate',IntermediateViewSet,basename='education/intermediate'),
 router.register(r'education/UG',UGViewet,basename='ug'),
-router.register(r'education/PG',PGViewset,basename='PG'),
-router.register(r'education',EducationViewSet,basename='education')
+router.register(r'education/PG',PGViewset,basename='PG')
 
 urlpatterns = [
     path('', include(router.urls)),

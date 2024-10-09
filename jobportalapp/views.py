@@ -9,6 +9,7 @@ from rest_framework import viewsets
 from .models import *
 from .serializers import *
 from rest_framework import generics
+from rest_framework.response import Response
 
 class RegisterView(APIView):
     def post(self, request):
@@ -61,7 +62,10 @@ class MyprofileViewSet(viewsets.ModelViewSet):
 
     # Override the create method if needed for additional logic
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
+        # Modify the response to include a success message
+        response.data['message'] = 'Profile created successfully!'
+        return Response(response.data, status=status.HTTP_201_CREATED)
 
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
@@ -106,7 +110,9 @@ class Submitjobviewset(viewsets.ModelViewSet):
     serializer_class = SubmitjobSerializer 
 
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
+        response.data['message'] = 'Job submitted successfully!'
+        return Response(response.data, status=status.HTTP_201_CREATED)
     
 class AccountSettingsViewSet(viewsets.ModelViewSet):
     queryset = AccountSettings.objects.all()
@@ -142,6 +148,3 @@ class PGViewset(viewsets.ModelViewSet):
     queryset = PG.objects.all()
     serializer_class = PGSerializer 
 
-class EducationViewSet(viewsets.ModelViewSet):
-    queryset = Education.objects.all()
-    serializer_class = EducationSerializer
