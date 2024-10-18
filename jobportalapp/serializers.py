@@ -88,23 +88,24 @@ class JobViewSerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields =  ['name']
+        fields =  "__all__"
 
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
-        fields =  ['name','country']
+        fields =  "__all__"
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
-        fields =  ['name','state']
+        fields =  "__all__"
 
 class MyprofileSerializer(serializers.ModelSerializer):
     # Use PrimaryKeyRelatedField to specify the foreign keys using their IDs
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
     state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all())
     city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all())
+
 
     class Meta:
         model = MyProfile
@@ -124,6 +125,7 @@ class IndustrySerializer(serializers.ModelSerializer):
 class SubmitjobSerializer(serializers.ModelSerializer):
     industry = IndustrySerializer()  # Nested serializer for industry
     job_category = JobCategorySerializer()  # Nested serializer for jobCategory
+
     class Meta:
         model = SubmitJob
         fields = "__all__"
@@ -189,11 +191,4 @@ class PGSerializer(serializers.ModelSerializer):
         model = PG 
         fields = "__all__"
 
-class EducationSerializer(serializers.ModelSerializer):
-    # intermediate = IntermediateSerializer()
-    # ug_name = UGSerializer()
-    # pg_name = PGSerializer()
-    class Meta:
-        model = Education
-        fields = "__all__"
         

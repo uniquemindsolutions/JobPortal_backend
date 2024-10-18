@@ -19,12 +19,12 @@ router.register(r'submitnewjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
 router.register(r'education/intermediate',IntermediateViewSet,basename='education/intermediate'),
 router.register(r'education/UG',UGViewet,basename='ug'),
-router.register(r'education/PG',PGViewset,basename='PG'),
-router.register(r'education',EducationViewSet,basename='education')
+router.register(r'education/PG',PGViewset,basename='PG')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('user/registration', RegisterView.as_view(), name='register'),
+    path('activate/<uidb64>/<token>/', ActivateAccountView.as_view(), name='activate'),
+    path('admin/login/', LoginView.as_view(), name='login'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]
