@@ -23,7 +23,8 @@ router.register(r'education/PG',PGViewset,basename='PG')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('user/registration', RegisterView.as_view(), name='register'),
+    path('activate/<uidb64>/<token>/', ActivateAccountView.as_view(), name='activate'),
+    path('admin/login/', LoginView.as_view(), name='login'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]

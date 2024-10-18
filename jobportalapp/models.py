@@ -147,7 +147,7 @@ class SubmitJob(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
     job_type = models.CharField(max_length=40, choices=JOB_TYPE_CHOICES)  
-    salary = models.CharField(max_length=50, choices=SALARY_CHOICES)  
+    salary_type = models.CharField(max_length=50, choices=SALARY_CHOICES)  
     min_salary = models.IntegerField(blank=True, null=True)  # Optional
     max_salary = models.IntegerField(blank=True, null=True)  # Optional
     skills = models.CharField(max_length=50, blank=True, null=True)  # Required
@@ -157,6 +157,7 @@ class SubmitJob(models.Model):
     # upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
     about_company = models.TextField(blank=True, null=True)
     work_mode =  models.CharField(max_length=50,choices=WORK_MODE_CHOICES)
+    created_date = models.DateTimeField(auto_now_add=True)
     address = models.TextField()  # Required
     country = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True)  # Required
     state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True)  # Required
@@ -165,7 +166,7 @@ class SubmitJob(models.Model):
     intermediate = models.ForeignKey(Intermediate, on_delete=models.SET_NULL, null=True, blank=True)
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)
-
+    status = models.IntegerField(default=0)
     def __str__(self):
         return self.job_title
 
