@@ -152,7 +152,7 @@ class SubmitJob(models.Model):
     max_salary = models.IntegerField(blank=True, null=True)  # Optional
     skills = models.CharField(max_length=50, blank=True, null=True)  # Required
     experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES, blank=True, null=True)  # Required
-    location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
+    city_location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
     english_fluency = models.CharField(max_length=90, choices=ENGLISH_FLUENCY_CHOICES,null=True, blank=True)  # Optional
     # upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
     about_company = models.TextField(blank=True, null=True)
@@ -167,6 +167,10 @@ class SubmitJob(models.Model):
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.IntegerField(default=0)
+
+    def formatted_created_date(self):
+        return self.created_date.strftime('%d-%m-%Y') 
+    
     def __str__(self):
         return self.job_title
 
@@ -181,3 +185,6 @@ class ChangePassword(models.Model):
     old_password = models.CharField(max_length=90)
     new_password = models.CharField(max_length=90)
     confirm_password = models.CharField(max_length=90)    
+
+class ProfilePhoto(models.Model):
+    profile_photo = models.ImageField(upload_to='profile_photos/')
