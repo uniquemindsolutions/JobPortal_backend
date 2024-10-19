@@ -191,4 +191,7 @@ class PGSerializer(serializers.ModelSerializer):
         model = PG 
         fields = "__all__"
 
-        
+class ProfilePhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfilePhoto
+        fields = ['id', 'profile_photo']

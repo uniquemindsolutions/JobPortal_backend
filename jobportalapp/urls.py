@@ -20,7 +20,7 @@ router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsetti
 router.register(r'education/intermediate',IntermediateViewSet,basename='education/intermediate'),
 router.register(r'education/UG',UGViewet,basename='ug'),
 router.register(r'education/PG',PGViewset,basename='PG')
-
+router.register(r'profile-photo', ProfilePhotoViewSet, basename='profile-photo')
 urlpatterns = [
     path('', include(router.urls)),
     path('user/registration', RegisterView.as_view(), name='register'),
