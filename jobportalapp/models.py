@@ -67,26 +67,6 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
-
-
-# Profile model with foreign keys to Country, State, and City
-class MyProfile(models.Model):
-    photo = models.ImageField(upload_to='MyProfile/Images', blank=True, null=True)
-    employee_name = models.CharField(max_length=80)
-    website = models.URLField()
-    email = models.EmailField(max_length=254)
-    company_size = models.IntegerField()
-    founded_date = models.DateField(auto_now_add=True)
-    category = models.CharField(max_length=90)
-    phone_number = models.CharField(max_length=10)
-    about_company = models.TextField(max_length=160)
-    address = models.TextField(max_length=180)
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
-    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
-    zip_code = models.IntegerField()
-    map_location = models.CharField(max_length=100, blank=True, null=True)
-
 # Job category model
 class JobCategory(models.Model):
     job_category = models.CharField(max_length=150)
@@ -100,6 +80,27 @@ class Industry(models.Model):
 
     def __str__(self):
         return self.industry
+
+# Profile model with foreign keys to Country, State, and City
+class MyProfile(models.Model):
+    photo = models.ImageField(upload_to='MyProfile/Images', blank=True, null=True)
+    employee_name = models.CharField(max_length=80)
+    website = models.URLField()
+    email = models.EmailField(max_length=254)
+    company_size = models.IntegerField()
+    founded_date = models.DateField(auto_now_add=True)
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
+    functional_area = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=10)
+    about_company = models.TextField(max_length=160)
+    address = models.TextField(max_length=180)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='my_profiles')
+    zip_code = models.IntegerField()
+    map_location = models.CharField(max_length=100, blank=True, null=True)
+
+
 
 class Intermediate(models.Model):
     inter = models.CharField(max_length=120, blank=True, null=True)
@@ -125,7 +126,7 @@ class SubmitJob(models.Model):
     EXPERIENCE_CHOICES = [
         ('Expert', 'Expert'),
         ('Intermediate', 'Intermediate'),
-        ('No Experience', 'No Experience')
+        ('Fresher', 'Fresher')
     ]
     ENGLISH_FLUENCY_CHOICES = [
         ('Basic', 'Basic'),
@@ -152,9 +153,9 @@ class SubmitJob(models.Model):
     max_salary = models.IntegerField(blank=True, null=True)  # Optional
     skills = models.CharField(max_length=50, blank=True, null=True)  # Required
     experience = models.CharField(max_length=50, choices=EXPERIENCE_CHOICES, blank=True, null=True)  # Required
-    location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
+    city_location = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True, related_name='job_location_set')  # Required
     english_fluency = models.CharField(max_length=90, choices=ENGLISH_FLUENCY_CHOICES,null=True, blank=True)  # Optional
-    # upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
+    upload_file = models.FileField(upload_to='JobDetails/File', blank=True, null=True)  # Optional
     about_company = models.TextField(blank=True, null=True)
     work_mode =  models.CharField(max_length=50,choices=WORK_MODE_CHOICES)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -167,6 +168,10 @@ class SubmitJob(models.Model):
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.IntegerField(default=0)
+
+    def formatted_created_date(self):
+        return self.created_date.strftime('%Y-%m-%d')  
+    
     def __str__(self):
         return self.job_title
 
@@ -181,3 +186,6 @@ class ChangePassword(models.Model):
     old_password = models.CharField(max_length=90)
     new_password = models.CharField(max_length=90)
     confirm_password = models.CharField(max_length=90)    
+
+class ProfilePhoto(models.Model):
+    profile_photo = models.ImageField(upload_to='profile_photos/')

@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes,force_str
 from .utils import account_activation_token
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class RegisterView(APIView):
     def post(self, request):
@@ -190,3 +191,13 @@ class PGViewset(viewsets.ModelViewSet):
     queryset = PG.objects.all()
     serializer_class = PGSerializer 
 
+class ProfilePhotoViewSet(viewsets.ModelViewSet):
+    queryset = ProfilePhoto.objects.all()
+    serializer_class = ProfilePhotoSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
