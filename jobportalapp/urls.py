@@ -26,5 +26,5 @@ urlpatterns = [
     path('registration/', RegisterView.as_view(), name='registration'), 
     path('activate/<uidb64>/<token>/', ActivateAccountView.as_view(), name='activate'),
     path('admin/login/', LoginView.as_view(), name='login'),
-    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password')
 ]
