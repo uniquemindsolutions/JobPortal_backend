@@ -95,7 +95,7 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 class InstituteSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Institute
+        model = Institute
         fields = "__all__"
 
 class Education_DetailsSerializer(serializers.ModelSerializer):
