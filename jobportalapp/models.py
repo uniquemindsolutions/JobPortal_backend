@@ -142,8 +142,17 @@ class SubmitJob(models.Model):
     SCHOOLING_CHOICE = [
         ('SSC','SSC')
     ]
+    Status_Choice =[
+        ('Active','Active'),
+        ('Inactive','Inactive'),
+        ('Expired','Expired')
+    ]
     job_title = models.CharField(max_length=100)  # Required
     number_of_positions = models.IntegerField(default=0)
+    company_logo = models.ImageField(upload_to='SubmitJob/Companylogos')
+    min_experience = models.IntegerField(default=0)	
+    max_experience = models.IntegerField(default=0)
+    company_name = models.CharField(max_length=150,blank=True,null=True)
     job_description = models.TextField()  # Required
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
@@ -167,7 +176,7 @@ class SubmitJob(models.Model):
     intermediate = models.ForeignKey(Intermediate, on_delete=models.SET_NULL, null=True, blank=True)
     ug_course = models.ForeignKey(UG, on_delete=models.SET_NULL, null=True, blank=True)
     pg_course = models.ForeignKey(PG, on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.IntegerField(default=0)
+    job_status = models.CharField(max_length=40, choices=Status_Choice)  
 
     def formatted_created_date(self):
         return self.created_date.strftime('%Y-%m-%d')  

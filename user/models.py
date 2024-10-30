@@ -81,12 +81,18 @@ class UserProfile(models.Model):
         ('2 Months', '2 Months'),
         ('3 Months', '3 Months')
     ]
+    Experience_Choice = [
+        ('Fresher', 'Fresher'),	
+        ('Below 1 year', 'Below 1 year'),
+        ('2 years', '2 years'),
+    ]
     profile_photo = models.ImageField(upload_to='User/Profile/images')
     first_name = models.CharField(max_length=120, blank=True,null=True)
     last_name = models.CharField(max_length=120)
     email = models.EmailField(max_length=200)
     phone_number = models.CharField(max_length=10)
     resume = models.FileField(upload_to='User/Profile/Resume')
+    total_experience = models.CharField(max_length=150, choices=Experience_Choice, blank=True, null=True)  # Required
     current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='current_loaction')
     preferred_locations = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_location')
     notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, blank=True, null=True)  # Required
