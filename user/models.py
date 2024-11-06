@@ -1,30 +1,8 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from jobportalapp.models import SubmitJob, User
 # Create your models here.
-
-class CustomUser(AbstractUser):
-    USER_TYPE_CHOICES = (
-        ('admin', 'Admin'),
-        ('user', 'User'),
-    )
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='user')
-
-    groups = models.ManyToManyField(
-        Group,
-        related_name='customuser_set',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='customuser_set',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
-    
+ 
 class Appliedjobs(models.Model):
     applied_count = models.IntegerField()
 
@@ -71,7 +49,18 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+class PreferredDepartmentFunction(models.Model):
+    preferred_departement_name = models.CharField(max_length=150)
+
+class PreferredJobTitle(models.Model):
+    preferredjobtitle = models.CharField(max_length=150)
+
+class Years(models.Model):
+    experience_level = models.CharField(max_length=50)
+    def __str__(self):
+        return self.experience_level
+
 class UserProfile(models.Model):
     NOTICE_PERIOD_CHOICES = [
         ('Immediately available', 'Immediately available'),
@@ -81,18 +70,14 @@ class UserProfile(models.Model):
         ('2 Months', '2 Months'),
         ('3 Months', '3 Months')
     ]
-    Experience_Choice = [
-        ('Fresher', 'Fresher'),	
-        ('Below 1 year', 'Below 1 year'),
-        ('2 years', '2 years'),
-    ]
     profile_photo = models.ImageField(upload_to='User/Profile/images')
     first_name = models.CharField(max_length=120, blank=True,null=True)
     last_name = models.CharField(max_length=120)
     email = models.EmailField(max_length=200)
     phone_number = models.CharField(max_length=10)
     resume = models.FileField(upload_to='User/Profile/Resume')
-    total_experience = models.CharField(max_length=150, choices=Experience_Choice, blank=True, null=True)  # Required
+    industry = models.ForeignKey(PreferredDepartmentFunction,on_delete=models.SET_NULL, null=True, blank=True, related_name='industry')
+    total_experience = models.ForeignKey(Years, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
     current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='current_loaction')
     preferred_locations = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_location')
     notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, blank=True, null=True)  # Required
@@ -165,13 +150,6 @@ class Education_Details(models.Model):
     passing_year_temp = models.DateTimeField(null=True)  # New temporary field
     education_type = models.CharField(max_length=120, choices=Education_Type_Choice, blank=True, null=True)
 
-
-class PreferredDepartmentFunction(models.Model):
-    preferred_departement_name = models.CharField(max_length=150)
-
-class PreferredJobTitle(models.Model):
-    preferredjobtitle = models.CharField(max_length=150)
-
 class Job_Preferences(models.Model):
     JOB_TYPE_CHOICES = [
         ('Permanent', 'Permanent'),
@@ -219,32 +197,27 @@ class PersonDetails(models.Model):
         ('Female','Female'),
         ('Others','Others')
     ]
-    Category_Choice = [
-        ('OC','OC'),
-        ('General','General'),
-    ]
     Carrer_Break_Choice = [
         ('Yes','Yes'),
         ('No','No')
     ]
-    Resident_Status_Choice = [
-        ('Yes','Yes'),
-        ('No','No'),
-    ]
     Work_Permit_For_USA_Choice = [
         ('Green Card holder','Green Card holder'),
+        ('Have L1 Visa','Have L1 Visa'),
+        ('US Citizen','US Citizen'),
+        ('TN Permit Holder','TN Permit Holder'),
+        ('Have H1 Visa','Have H1 Visa'),
+        ('I have Work Authorization','I have Work Authorization'),
+        ('Authorized to work in the US','Authorized to work in the US'),
+        ('No US Work authorization','No US Work authorization'),
     ]
-    Work_Permit_For_Other_Country_Choice=[
-        ('Yes','Yes'),
-        ('No','No'),
-    ]
+    
     gender = models.CharField(max_length=150,choices=Gender_Choice, blank=True, null=True)
     data_of_birth = models.DateField()
-    category = models.CharField(max_length=100,choices=Category_Choice)
     Have_you_taken_a_career_break = models.CharField(max_length=20,choices=Carrer_Break_Choice)
-    resident_status = models.CharField(max_length=100,choices=Resident_Status_Choice)
+    resident_status = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_resident_status')
     work_permit_for_USA = models.CharField(max_length=100,choices = Work_Permit_For_USA_Choice)
-    work_permit_for_other_country = models.CharField(max_length=100,choices=Work_Permit_For_Other_Country_Choice)
+    work_permit_for_other_country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_country')
     Nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details')
     i_am_specially_abled = models.BooleanField()
 
@@ -275,4 +248,12 @@ class Account_settings(models.Model):
     hide_profile_from_recruiters = models.BooleanField(default=False)
     deactivate_account = models.BooleanField(default=False)
 
+class SavedJobs(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applied_jobs")
+    job_id = models.ForeignKey(SubmitJob, on_delete=models.CASCADE, related_name="applications")
+    
+    class Meta:
+        unique_together = ('user_id', 'job_id')  # Use the exact field names
 
+    def __str__(self):
+        return f"User {self.user_id} saved Job {self.job_id}"

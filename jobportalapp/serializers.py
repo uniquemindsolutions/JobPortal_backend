@@ -4,27 +4,49 @@ from .models import *
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
+# class RegisterSerializer(serializers.ModelSerializer):
+#     email = serializers.EmailField(
+#         required=True,
+#         validators=[UniqueValidator(queryset=User.objects.all())]
+#     )
+#     password = serializers.CharField(
+#         write_only=True,
+#         required=True,
+#         style={'input_type': 'password'}
+#     )
+#     role = serializers.ChoiceField(choices=User.ROLE_CHOICES,required=True)
 
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password],
-        style={'input_type': 'password'}
-    )
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'password', 'role']
+
+#     def create(self, validated_data):
+#         user = User(
+#             username=validated_data['username'],
+#             email=validated_data['email'],
+#             role=validated_data['role'],
+#             is_active=True  # Set to True for testing
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
+class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
+    role = serializers.ChoiceField(choices=User.ROLE_CHOICES, required=True)  # Make sure to include this
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password', 'role')
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = User(
             username=validated_data['username'],
-            email=validated_data['email']
+            email=validated_data['email'],
+            role=validated_data['role'],  # Ensure the role is being set
+            is_active=True  # Ensure the user is active upon registration
         )
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data['password'])  # Hash the password
         user.save()
         return user
 
@@ -129,10 +151,15 @@ class SubmitjobSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubmitJob
         fields = "__all__"
+        extra_kwargs = {
+            'intermediate': {'required': False, 'allow_null': True},
+            'ug_course': {'required': False, 'allow_null': True},
+            'pg_course': {'required': False, 'allow_null': True},
+        }
 
 class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AccountSettings
+        model = Account_settings
         fields = "__all__"
 
 class ChangepasswordSerializer(serializers.ModelSerializer):
@@ -155,7 +182,8 @@ class PGSerializer(serializers.ModelSerializer):
         model = PG 
         fields = "__all__"
 
-class ProfilePhotoSerializer(serializers.ModelSerializer):
+class Email_Push_NotificationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProfilePhoto
-        fields = ['id', 'profile_photo']
+        model = Email_Push_Notifications
+        fields = "__all__"
+        

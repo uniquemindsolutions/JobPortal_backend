@@ -2,9 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import *
 # Register your models here.
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Appliedjobs)
 admin.site.register(Jobalerts)
 admin.site.register(Message)
