@@ -29,9 +29,11 @@ router.register(r'Accountsetting',Account_settingsViewSet,basename='Accountsetti
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('register/', RegisterAPI.as_view(), name='register'),
-    path('login/', LoginAPI.as_view(), name='login'),
-    path('profile/', UserProfileAPI.as_view(), name='profile'),
+    # path('register/', RegisterAPI.as_view(), name='register'),
+    # path('login/', LoginAPI.as_view(), name='login'),
+    # path('profile/', UserProfileAPI.as_view(), name='profile'),
     path('change_password/', UserChangePasswordView.as_view(), name='change_password'),
-    path('submit-job/', SubmitJobView.as_view(), name='submit-job')
+    path('submit-job/', SubmitJobView.as_view(), name='submit-job'),
+    path('saved-job/', SavedJobsView.as_view(), name='save-job'),
+    path('get-person-details/', PersonDetailsByIdView.as_view(), name='get_person_details_by_id'),
 ]

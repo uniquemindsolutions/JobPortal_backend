@@ -1,6 +1,7 @@
 from django.urls import path,include
 from .views import * 
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
 router.register(r'totalvistors',Total_Visitor_CountViewSet,basename='totalvisitorcount'),
@@ -19,12 +20,15 @@ router.register(r'submitnewjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
 router.register(r'education/intermediate',IntermediateViewSet,basename='education/intermediate'),
 router.register(r'education/UG',UGViewet,basename='ug'),
-router.register(r'education/PG',PGViewset,basename='PG')
-router.register(r'profile-photo', ProfilePhotoViewSet, basename='profile-photo')
+router.register(r'education/PG',PGViewset,basename='PG'),
+router.register(r'Email_Push_Notifications',Email_Push_NotificationsViewSet , basename='Email_Push_Notifications')
+
 urlpatterns = [
     path('', include(router.urls)),
-    path('registration/', RegisterView.as_view(), name='registration'), 
+    path('registration/', RegisterView.as_view(), name='register'), 
     path('activate/<uidb64>/<token>/', ActivateAccountView.as_view(), name='activate'),
-    path('admin/login/', LoginView.as_view(), name='login'),
-    path('change-password/', ChangePasswordView.as_view(), name='change-password')
+    path('login/', LoginView.as_view(), name='login'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
