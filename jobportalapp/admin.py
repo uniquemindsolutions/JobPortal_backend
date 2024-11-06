@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import * 
 # Register your models here.
+admin.site.register(User)
 admin.site.register(TotalVisitorCount)
 admin.site.register(Shortlisted_Candidates)
 admin.site.register(ProfileViews)
@@ -13,7 +14,8 @@ admin.site.register(MyProfile)
 admin.site.register(JobCategory)
 admin.site.register(Industry)
 admin.site.register(SubmitJob)
-admin.site.register(AccountSettings)
+admin.site.register(Account_settings)
+admin.site.register(Email_Push_Notifications)
 admin.site.register(ChangePassword)
 admin.site.register(Intermediate)
 admin.site.register(UG)

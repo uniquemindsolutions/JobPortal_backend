@@ -2,35 +2,29 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import *
-from user.models import CustomUser
 # User Serializer
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
-
 # Register Serializer
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser  # Use CustomUser, not User
-        fields = ('username', 'email', 'password', 'user_type')
+# class RegisterSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser  # Use CustomUser, not User
+#         fields = ('username', 'email', 'password', 'user_type')
 
-    def create(self, validated_data):
-        user = CustomUser(**validated_data)  # Create an instance of CustomUser
-        user.set_password(validated_data['password'])  # Hash the password
-        user.save()
-        return user
+#     def create(self, validated_data):
+#         user = CustomUser(**validated_data)  # Create an instance of CustomUser
+#         user.set_password(validated_data['password'])  # Hash the password
+#         user.save()
+#         return user
 
-# Login Serializer
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
+# # Login Serializer
+# class LoginSerializer(serializers.Serializer):
+#     username = serializers.CharField()
+#     password = serializers.CharField()
 
-    def validate(self, data):
-        user = authenticate(**data)
-        if user and user.is_active:
-            return user
-        raise serializers.ValidationError("Invalid credentials")
+#     def validate(self, data):
+#         user = authenticate(**data)
+#         if user and user.is_active:
+#             return user
+#         raise serializers.ValidationError("Invalid credentials")
 
 class AppliedJobSerializer(serializers.ModelSerializer):
     class Meta:
@@ -158,3 +152,11 @@ class Account_settingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account_settings
         fields =  "__all__"
+
+class SavedJobsSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id')
+    job_id = serializers.IntegerField(source='job.id')
+
+    class Meta:
+        model = SavedJobs
+        fields = ['user_id', 'job_id']
