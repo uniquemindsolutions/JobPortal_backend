@@ -194,3 +194,5 @@ class Email_Push_NotificationsSerializer(serializers.ModelSerializer):
         model = Email_Push_Notifications
         fields = "__all__"
         
+
+        
