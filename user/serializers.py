@@ -122,8 +122,11 @@ class SkillsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skills
         fields =  "__all__"
-
+        
 class ProjectsSerializer(serializers.ModelSerializer):
+    start_date = serializers.DateTimeField(format="%d-%m-%Y", input_formats=["%d-%m-%Y"])
+    end_date = serializers.DateTimeField(format="%d-%m-%Y", input_formats=["%d-%m-%Y"])
+
     class Meta:
         model = Projects
         fields = "__all__"

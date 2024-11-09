@@ -36,4 +36,5 @@ urlpatterns = [
     path('submit-job/', SubmitJobView.as_view(), name='submit-job'),
     path('saved-job/', SavedJobsView.as_view(), name='save-job'),
     path('get-person-details/', PersonDetailsByIdView.as_view(), name='get_person_details_by_id'),
+    path('get-jobpreference/', Job_PreferencesDetailedView.as_view(), name='get_jobpreference'),
 ]

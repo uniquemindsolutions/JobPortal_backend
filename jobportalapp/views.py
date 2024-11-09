@@ -23,6 +23,7 @@ from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import datetime, timedelta,timezone
 from django.utils import timezone
+from rest_framework.permissions import IsAuthenticated
 # class RegisterView(APIView):
 #     def post(self, request):
 #         serializer = RegisterSerializer(data=request.data)
@@ -106,8 +107,7 @@ class LoginView(APIView):
 
                 # Set expiration time to 45 minutes from now
                 current_time = timezone.now()  # This ensures we're getting the current time in UTC
-                print(current_time)
-                expiration_time = current_time + timedelta(minutes=5)
+                expiration_time = current_time + timedelta(minutes=55)
                 access_token.set_exp(lifetime=expiration_time - current_time)  # Set the expiration time
 
                 # Log user role for debugging
@@ -131,6 +131,16 @@ class LoginView(APIView):
                         'access': str(access_token),
                         'role': 'user',
                         'redirect_url': '/user-dashboard/',
+                        'username': user.username,
+                        'email': user.email,
+                        'access_token_expiration': expiration_time.strftime('%Y-%m-%d %H:%M:%S UTC')
+                    }, status=status.HTTP_200_OK)
+                elif user.role == 'superadmin':
+                    return Response({
+                        'refresh': str(refresh),
+                        'access': str(access_token),
+                        'role': 'superadmin',
+                        'redirect_url': '/superadmin-dashboard/',
                         'username': user.username,
                         'email': user.email,
                         'access_token_expiration': expiration_time.strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -226,21 +236,28 @@ class AccountSettingsViewSet(viewsets.ModelViewSet):
 
 class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangepasswordSerializer
-    model = User
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
 
     def get_object(self, queryset=None):
-        return self.request.user
+        # Check if the user is authenticated
+        user = self.request.user
+        if not user.is_authenticated:
+            raise NotImplementedError("User Does Not Exist")
+        return user
 
     def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        user = self.get_object()
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            # Save the new password
-            serializer.save()
+            # Set and save the new password
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
             return Response({"detail": "Password has been changed successfully."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     
 class IntermediateViewSet(viewsets.ModelViewSet):
     queryset = Intermediate.objects.all()

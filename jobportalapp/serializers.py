@@ -166,6 +166,13 @@ class ChangepasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChangePassword
         fields = "__all__"
+    def validate(self, data):
+        """
+        Check that the new_password and confirm_password fields match.
+        """
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError("New password and confirm password do not match.")
+        return data
 
 class IntermediateSerializer(serializers.ModelSerializer):
     class Meta:

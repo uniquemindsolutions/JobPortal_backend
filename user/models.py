@@ -146,8 +146,7 @@ class Education_Details(models.Model):
     institute = models.ForeignKey(Institute, on_delete=models.CASCADE)
     grading_system = models.CharField(max_length=150, choices=Grading_System_Choice, blank=True, null=True)
     marks = models.CharField(max_length=120)
-    passing_year = models.BigIntegerField(null=True)  # Existing field
-    passing_year_temp = models.DateTimeField(null=True)  # New temporary field
+    passing_year = models.BigIntegerField(null=True)  
     education_type = models.CharField(max_length=120, choices=Education_Type_Choice, blank=True, null=True)
 
 class Job_Preferences(models.Model):
@@ -211,12 +210,20 @@ class PersonDetails(models.Model):
         ('Authorized to work in the US','Authorized to work in the US'),
         ('No US Work authorization','No US Work authorization'),
     ]
-    
+    MARITAL_STATUS_CHOICES = [
+    ('single', 'Single'),
+    ('married', 'Married'),
+    ('divorced', 'Divorced'),
+    ('widowed', 'Widowed'),
+    ('separated', 'Separated'),
+    ('other', 'Other'),
+    ]
     gender = models.CharField(max_length=150,choices=Gender_Choice, blank=True, null=True)
-    data_of_birth = models.DateField()
+    date_of_birth = models.DateField()
     Have_you_taken_a_career_break = models.CharField(max_length=20,choices=Carrer_Break_Choice)
     resident_status = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_resident_status')
     work_permit_for_USA = models.CharField(max_length=100,choices = Work_Permit_For_USA_Choice)
+    marital_status = models.CharField(max_length=100,choices=MARITAL_STATUS_CHOICES)
     work_permit_for_other_country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_country')
     Nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details')
     i_am_specially_abled = models.BooleanField()
