@@ -22,6 +22,7 @@ router.register(r'education/intermediate',IntermediateViewSet,basename='educatio
 router.register(r'education/UG',UGViewet,basename='ug'),
 router.register(r'education/PG',PGViewset,basename='PG'),
 router.register(r'Email_Push_Notifications',Email_Push_NotificationsViewSet , basename='Email_Push_Notifications')
+router.register(r'Email_Push',Email_PushViewSet , basename='Email_Push')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -274,3 +274,7 @@ class PGViewset(viewsets.ModelViewSet):
 class Email_Push_NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Email_Push_Notifications.objects.all()
     serializer_class = Email_Push_NotificationsSerializer
+
+class Email_PushViewSet(viewsets.ModelViewSet):
+    queryset = Email_Push_Notifications.objects.all()
+    serializer_class = Email_Push_NotificationsSerializer
