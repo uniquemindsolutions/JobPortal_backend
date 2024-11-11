@@ -25,3 +25,5 @@ class SubmitJobFilter(django_filters.FilterSet):
     class Meta:
         model = SubmitJob
         fields = ['work_mode', 'industry', 'city','job_title']
+
+        
