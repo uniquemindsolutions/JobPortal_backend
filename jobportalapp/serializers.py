@@ -144,9 +144,19 @@ class MyprofileSerializer(serializers.ModelSerializer):
         model = MyProfile
         fields = "__all__"
 
+class NullablePrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    def to_internal_value(self, data):
+        if data == '':
+            return None  # Convert empty string to None
+        return super().to_internal_value(data)
+
 class SubmitjobSerializer(serializers.ModelSerializer):
-    industry = serializers.PrimaryKeyRelatedField(queryset=Industry.objects.all())  # Only returns ID
+    # industry_name = serializers.StringRelatedField(source='industry', read_only=True)
+    industry = serializers.PrimaryKeyRelatedField(queryset=Industry.objects.all())
     job_category = serializers.PrimaryKeyRelatedField(queryset=JobCategory.objects.all())  # Only returns ID
+    intermediate = NullablePrimaryKeyRelatedField(queryset=Intermediate.objects.all(), required=False, allow_null=True)
+    ug_course = NullablePrimaryKeyRelatedField(queryset=UG.objects.all(), required=False, allow_null=True)
+    pg_course = NullablePrimaryKeyRelatedField(queryset=PG.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = SubmitJob
@@ -156,7 +166,13 @@ class SubmitjobSerializer(serializers.ModelSerializer):
             'ug_course': {'required': False, 'allow_null': True},
             'pg_course': {'required': False, 'allow_null': True},
         }
-
+    def to_internal_value(self, data):
+        # Convert empty strings to None for specific fields
+        for field in ['intermediate', 'ug_course', 'pg_course']:
+            if data.get(field) == '':
+                data[field] = None
+        return super().to_internal_value(data)
+    
 class AccountSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account_settings

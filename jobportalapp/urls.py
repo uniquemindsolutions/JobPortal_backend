@@ -15,13 +15,13 @@ router.register(r'states', StateViewSet,basename='states'),
 router.register(r'cities', CityViewSet,basename='cities'),
 router.register(r'jobcategory',JobCategoryViewSet,basename='jobcategory'),
 router.register(r'industry',IndustryViewSet,basename='industry'),
-router.register(r'myprofile',MyprofileViewSet,basename='myprofileview'),
 router.register(r'submitnewjob',Submitjobviewset,basename='mynewjob'),
 router.register(r'accountsettings',AccountSettingsViewSet,basename='accountsettings'),
 router.register(r'education/intermediate',IntermediateViewSet,basename='education/intermediate'),
 router.register(r'education/UG',UGViewet,basename='ug'),
 router.register(r'education/PG',PGViewset,basename='PG'),
 router.register(r'Email_Push_Notifications',Email_Push_NotificationsViewSet , basename='Email_Push_Notifications')
+router.register(r'Email_Push',Email_PushViewSet , basename='Email_Push')
 
 urlpatterns = [
     path('', include(router.urls)),

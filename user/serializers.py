@@ -93,15 +93,13 @@ class InstituteSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class Education_DetailsSerializer(serializers.ModelSerializer):
+    passing_year = serializers.DateField(
+        format="%d-%m-%Y",  # Format for serialization (output)
+        input_formats=["%d-%m-%Y", "%Y-%m-%d"]  # Accept both DD-MM-YYYY and YYYY-MM-DD
+    )
     class Meta:
         model = Education_Details
-        fields =  "__all__"
-    
-    def validate_passing_year(self, value):
-        # Check if value is a valid integer
-        if not isinstance(value, int):
-            raise serializers.ValidationError("Passing year must be an integer.")
-        return value
+        fields = "_all_"
 
 class PreferredDepartmentFunctionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -124,14 +122,24 @@ class SkillsSerializer(serializers.ModelSerializer):
         fields =  "__all__"
         
 class ProjectsSerializer(serializers.ModelSerializer):
-    start_date = serializers.DateTimeField(format="%d-%m-%Y", input_formats=["%d-%m-%Y"])
-    end_date = serializers.DateTimeField(format="%d-%m-%Y", input_formats=["%d-%m-%Y"])
+    start_date = serializers.DateField(
+        format="%d-%m-%Y",  # Format for serialization (output)
+        input_formats=["%d-%m-%Y", "%Y-%m-%d"]  # Accept both DD-MM-YYYY and YYYY-MM-DD
+    )
+    end_date = serializers.DateField(
+        format="%d-%m-%Y",  # Format for serialization (output)
+        input_formats=["%d-%m-%Y", "%Y-%m-%d"]  # Accept both DD-MM-YYYY and YYYY-MM-DD
+    )
 
     class Meta:
         model = Projects
         fields = "__all__"
 
 class PersonDetailsSerializer(serializers.ModelSerializer):
+    date_of_birth = serializers.DateField(
+        format="%d-%m-%Y",  # Format for serialization (output)
+        input_formats=["%d-%m-%Y", "%Y-%m-%d"]  # Accept both DD-MM-YYYY and YYYY-MM-DD
+    )
     class Meta:
         model = PersonDetails
         fields =  "__all__"
