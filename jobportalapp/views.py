@@ -218,17 +218,45 @@ class JobCategoryViewSet(viewsets.ModelViewSet):
 class IndustryViewSet(viewsets.ModelViewSet):
     queryset = Industry.objects.all()
     serializer_class = IndustrySerializer
+import logging
+logger = logging.getLogger(__name__)
 
 class Submitjobviewset(viewsets.ModelViewSet):
     queryset = SubmitJob.objects.all()
     serializer_class = SubmitjobSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = SubmitJobFilter
-
+    parser_classes = (MultiPartParser, FormParser)
     def create(self, request, *args, **kwargs):
+        logger.debug(f"API hit with data: {request.data}")  # Log the incoming data
         response = super().create(request, *args, **kwargs)
+        
+        # Log the response data before returning it
+        logger.debug(f"Response data: {response.data}")
+        
         response.data['message'] = 'Job submitted successfully!'
         return Response(response.data, status=status.HTTP_201_CREATED)
+    def update(self, request, *args, **kwargs):
+        # Create a mutable copy of request.data
+        mutable_data = request.data.copy()  # Now it's a mutable dict
+
+        # Convert empty strings to None for specific fields (if needed)
+        for field in ['intermediate', 'ug_course', 'pg_course']:
+            if mutable_data.get(field) == '':
+                mutable_data[field] = None
+        
+        logger.debug(f"API hit with data (PUT): {mutable_data}")
+
+        # Get the object to update
+        instance = self.get_object()
+
+        # Use the modified data to update the object
+        serializer = self.get_serializer(instance, data=mutable_data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class AccountSettingsViewSet(viewsets.ModelViewSet):
     queryset = Account_settings.objects.all()

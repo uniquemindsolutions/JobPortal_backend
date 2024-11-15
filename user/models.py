@@ -70,17 +70,17 @@ class UserProfile(models.Model):
         ('2 Months', '2 Months'),
         ('3 Months', '3 Months')
     ]
-    profile_photo = models.ImageField(upload_to='User/Profile/images')
-    first_name = models.CharField(max_length=120, blank=True,null=True)
-    last_name = models.CharField(max_length=120)
+    profile_photo = models.ImageField(upload_to='User/Profile/images',null=True,blank=True)
+    first_name = models.CharField(max_length=120,blank=True,null=True)
+    last_name = models.CharField(max_length=120,null=True,blank=True)
     email = models.EmailField(max_length=200)
     phone_number = models.CharField(max_length=10)
-    resume = models.FileField(upload_to='User/Profile/Resume')
+    resume = models.FileField(upload_to='User/Profile/Resume',null=True,blank=True)
     industry = models.ForeignKey(PreferredDepartmentFunction,on_delete=models.SET_NULL, null=True, blank=True, related_name='industry')
     total_experience = models.ForeignKey(Years, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
     current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='current_loaction')
     preferred_locations = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_location')
-    notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, blank=True, null=True)  # Required
+    notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, null=True,blank=True)  # Required
 
 class Workexperience(models.Model):
     WORKPLACE_CHOICES = [
@@ -99,15 +99,20 @@ class Workexperience(models.Model):
     ('USD', 'US Dollar (USD)'),
     ('AED', 'UAE Dirham (AED)'),
     ]
+    Current_Company_Choice = [
+        ('Yes','Yes'),
+        ('No','No')
+    ]
     current_job_title = models.CharField(max_length=120)
     company_name = models.CharField(max_length=120)
-    is_current_company = models.BooleanField(default='True')
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    workplace = models.CharField(max_length=150,choices=WORKPLACE_CHOICES)
-    employment_type = models.CharField(max_length=50, choices=EMPLOYMENT_TYPE_CHOICES, blank=True, null=True)
-    current_salary = models.CharField(max_length=50,choices=Current_Salary_Choice)
-    description = models.TextField()
+    is_current_company = models.CharField(max_length=20,choices=Current_Company_Choice,null=True,blank=True)
+    start_date = models.DateTimeField(null=True,blank=True)
+    end_date = models.DateTimeField(null=True,blank=True)
+    workplace = models.CharField(max_length=150,choices=WORKPLACE_CHOICES,null=True,blank=True)
+    employment_type = models.CharField(max_length=50, choices=EMPLOYMENT_TYPE_CHOICES,blank=True,)
+    currency_type = models.CharField(max_length=50,choices=Current_Salary_Choice,null=True,blank=True)
+    current_salary = models.CharField(max_length=20,null=True,blank=True)
+    description = models.TextField(null=True,blank=True)
 
 class Qualification(models.Model):
     name = models.CharField(max_length=100)
@@ -140,55 +145,55 @@ class Education_Details(models.Model):
         ('Part Time', 'Part Time'),
         ('Correspondence', 'Correspondence')
     ]
-    
     qualification = models.ForeignKey(Qualification, on_delete=models.CASCADE)
-    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE)
-    institute = models.ForeignKey(Institute, on_delete=models.CASCADE)
-    grading_system = models.CharField(max_length=150, choices=Grading_System_Choice, blank=True, null=True)
-    marks = models.CharField(max_length=120)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE,null=True,blank=True)
+    # institute = models.ForeignKey(Institute, on_delete=models.CASCADE)
+    institute = models.CharField(max_length=200)
+    grading_system = models.CharField(max_length=150, choices=Grading_System_Choice,null=True,blank=True)
+    marks = models.CharField(max_length=120,null=True,blank=True)
     passing_year = models.BigIntegerField(null=True)  
-    education_type = models.CharField(max_length=120, choices=Education_Type_Choice, blank=True, null=True)
+    education_type = models.CharField(max_length=120, choices=Education_Type_Choice)
 
 class Job_Preferences(models.Model):
     JOB_TYPE_CHOICES = [
         ('Permanent', 'Permanent'),
-        ('Temporary/Contract', 'Temporary/Contract'),
+        ('Temporary_Contract', 'Temporary_Contract'),
         ('Both','Both')
     ]
     EMPLOYEEE_TYPE_CHOICE = [
-        ('Full time','Full time'),
-        ('Part time','Part time'),
+        ('Full_time','Full_time'),
+        ('Part_time','Part_time'),
         ('Both','Both')
     ]
     Preferred_Workplace_Choice = [
-        ('In-Office','In-Office'),
+        ('In_Office','In_Office'),
         ('Hybrid','Hybrid'),
-        ('Work from home','Work from home')
+        ('Work_from_home','Work_from_home')
     ]
     Currently_looking_for_Choice =[
-        ('Intership','Intership'),
+        ('Internship','Internship'),
         ('Job','Job')
     ] 
     preferred_department_function = models.ForeignKey(PreferredDepartmentFunction, on_delete=models.CASCADE)
-    preferred_job_title =  models.ForeignKey(PreferredJobTitle, on_delete=models.CASCADE)
-    job_type = models.CharField(max_length=150,choices=JOB_TYPE_CHOICES, blank=True, null=True)
-    employee_type = models.CharField(max_length=150,choices=EMPLOYEEE_TYPE_CHOICE, blank=True, null=True)
-    prefreed_workplace = models.CharField(max_length=150,choices=Preferred_Workplace_Choice, blank=True, null=True)
+    preferred_job_title =  models.ForeignKey(PreferredJobTitle, on_delete=models.CASCADE,null=True,blank=True)
+    job_type = models.CharField(max_length=150,choices=JOB_TYPE_CHOICES, null=True,blank=True)
+    employee_type = models.CharField(max_length=150,choices=EMPLOYEEE_TYPE_CHOICE, null=True,blank=True)
+    prefreed_workplace = models.CharField(max_length=150,choices=Preferred_Workplace_Choice, null=True,blank=True)
     preferred_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='job_preferences')
-    what_are_you_currently_looking_for = models.CharField(max_length=150,choices=Currently_looking_for_Choice, blank=True, null=True)
+    what_are_you_currently_looking_for = models.CharField(max_length=150,choices=Currently_looking_for_Choice, null=True,blank=True)
 
 class Skills(models.Model):
-    IT_Skills  = models.CharField(max_length=120)
-    version = models.CharField(max_length=120)
-    last_used = models.DateTimeField()
-    experience = models.IntegerField()
+    IT_Skills  = models.CharField(max_length=120,null=True,blank=True)
+    version = models.CharField(max_length=120,null=True,blank=True)
+    last_used = models.DateField(null=True,blank=True)
+    experience = models.IntegerField(null=True,blank=True)
 
 class Projects(models.Model):
     title = models.CharField(max_length=120)
-    url = models.URLField()
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    details_of_project = models.TextField() 
+    url = models.URLField(null=True,blank=True)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True,blank=True)
+    details_of_project = models.TextField(null=True,blank=True) 
 
 class PersonDetails(models.Model):
     Gender_Choice = [
@@ -216,14 +221,14 @@ class PersonDetails(models.Model):
     ('divorced', 'Divorced'),
     ('widowed', 'Widowed'),
     ('separated', 'Separated'),
-    ('other', 'Other'),
+    ('others', 'Others'),
     ]
     gender = models.CharField(max_length=150,choices=Gender_Choice, blank=True, null=True)
     date_of_birth = models.DateField()
     Have_you_taken_a_career_break = models.CharField(max_length=20,choices=Carrer_Break_Choice)
     resident_status = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_resident_status')
-    work_permit_for_USA = models.CharField(max_length=100,choices = Work_Permit_For_USA_Choice)
-    marital_status = models.CharField(max_length=100,choices=MARITAL_STATUS_CHOICES)
+    work_permit_for_USA = models.CharField(max_length=100,choices = Work_Permit_For_USA_Choice,null=True,blank=True)
+    marital_status = models.CharField(max_length=100,choices=MARITAL_STATUS_CHOICES,null=True,blank=True)
     work_permit_for_other_country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details_country')
     Nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details')
     i_am_specially_abled = models.BooleanField()
@@ -238,7 +243,7 @@ class Language_Page(models.Model):
         ('Proficient','Proficient')
     ]
     languange =models.ForeignKey(Languange, on_delete=models.SET_NULL,null=True, blank=True)
-    proficiency = models.CharField(max_length=100,choices = Proficiency_Choice)
+    proficiency = models.CharField(max_length=100,choices = Proficiency_Choice,null=True,blank=True)
 
 
 class Email_Push_Notifications(models.Model): 

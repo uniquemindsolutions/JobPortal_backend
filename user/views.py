@@ -74,7 +74,7 @@ class SubmitJobView(APIView):
         # Extract filter parameters from the request
         work_mode = request.query_params.get('work_mode', None)
         industry = request.query_params.get('industry', None)
-        city = request.query_params.get('city', None)
+        job_location = request.query_params.get('job_location', None)
 
         # Build the filter query parameters
         filter_params = {}
@@ -82,8 +82,8 @@ class SubmitJobView(APIView):
             filter_params['work_mode'] = work_mode
         if industry:
             filter_params['industry'] = industry
-        if city:
-            filter_params['city'] = city
+        if job_location:
+            filter_params['job_location'] = job_location
 
         # Construct the admin API URL with filters
         admin_api_url = f'http://127.0.0.1:8000/submitnewjob/'
@@ -121,15 +121,15 @@ class UserChangePasswordView(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = Country.objects.all()
+    queryset = Country.objects.all().order_by('id')
     serializer_class = CountrySerializer
 
 class StateViewSet(viewsets.ModelViewSet):
-    queryset = State.objects.all()
+    queryset = State.objects.all().order_by('id')
     serializer_class = StateSerializer
 
 class CityViewSet(viewsets.ModelViewSet):
-    queryset = City.objects.all()
+    queryset = City.objects.all().order_by('id')
     serializer_class = CitySerializer
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -156,12 +156,6 @@ class InstituteViewSet(viewsets.ModelViewSet):
 class Education_DetailsViewSet(viewsets.ModelViewSet):
     queryset = Education_Details.objects.all()
     serializer_class = Education_DetailsSerializer
-
-    def perform_create(self, serializer):
-        passing_year = self.request.data.get('passing_year')
-        if isinstance(passing_year, str):  # Check if it’s a string
-            passing_year = int(passing_year)  # Convert to int
-        serializer.save(passing_year=passing_year)
 
 class PreferredDepartmentFunctionViewSet(viewsets.ModelViewSet):
     queryset = PreferredDepartmentFunction.objects.all()
