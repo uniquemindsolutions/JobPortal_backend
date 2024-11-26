@@ -26,7 +26,7 @@ router.register(r'Languange',LanguangeViewSet,basename='Languange'),
 router.register(r'LanguagePage',LanguagePageViewSet,basename='LanguagePage'),
 router.register(r'Emailpushnotification',Email_Push_NotificationsViewSet,basename='Emailpushnotification'),
 router.register(r'Accountsetting',Account_settingsViewSet,basename='Accountsetting'),
-
+router.register(r'Years',YearsViewSet,basename='Years')
 urlpatterns = [
     path('', include(router.urls)),
     # path('register/', RegisterAPI.as_view(), name='register'),
