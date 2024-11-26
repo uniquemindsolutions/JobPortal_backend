@@ -302,6 +302,6 @@ class SavedJobsView(APIView):
         serializer = SavedJobsSerializer(submitted_jobs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class YearsViewSet(APIView):
+class YearsViewSet(viewsets.ModelViewSet):
     queryset = Years.objects.all()
     serializer_class = YearsSerializer
