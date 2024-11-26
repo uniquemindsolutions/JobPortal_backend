@@ -10,7 +10,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
         ('jobportalapp', '0037_account_settings_email_push_notifications_and_more'),
     ]
 
