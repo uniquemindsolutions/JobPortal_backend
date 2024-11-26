@@ -249,7 +249,7 @@ class PersonDetailsByIdView(APIView):
             return Response({'error': 'ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LanguangeViewSet(viewsets.ModelViewSet):
-    queryset = Languange.objects.all()
+    queryset = Language.objects.all()
     serializer_class = LanguangeSerializer
 
 class LanguagePageViewSet(viewsets.ModelViewSet):
@@ -301,3 +301,7 @@ class SavedJobsView(APIView):
         submitted_jobs = SavedJobs.objects.filter(user_id=user)  # Use 'user_id' to filter
         serializer = SavedJobsSerializer(submitted_jobs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class Years(APIView):
+    queryset = Years.objects.all()
+    serializer_class = YearsSerializer
