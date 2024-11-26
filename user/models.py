@@ -60,7 +60,6 @@ class Years(models.Model):
     experience_level = models.CharField(max_length=50)
     def __str__(self):
         return self.experience_level
-
 class UserProfile(models.Model):
     NOTICE_PERIOD_CHOICES = [
         ('Immediately available', 'Immediately available'),
@@ -70,6 +69,20 @@ class UserProfile(models.Model):
         ('2 Months', '2 Months'),
         ('3 Months', '3 Months')
     ]
+    Months_Choice = [
+        ('1 month', '1 month'),
+        ('2 month', '2 month'),
+        ('3 month', '3 month'),
+        ('4 month', '4 month'),
+        ('5 month', '5 month'),
+        ('6 month', '6 month'),
+        ('7 month', '7 month'),
+        ('8 month', '8 month'),
+        ('9 month', '9 month'),
+        ('10 month', '10 month'),
+        ('11 month', '11 month'),
+        ('12 month', '12 month')
+    ]
     profile_photo = models.ImageField(upload_to='User/Profile/images',null=True,blank=True)
     first_name = models.CharField(max_length=120,blank=True,null=True)
     last_name = models.CharField(max_length=120,null=True,blank=True)
@@ -78,9 +91,11 @@ class UserProfile(models.Model):
     resume = models.FileField(upload_to='User/Profile/Resume',null=True,blank=True)
     industry = models.ForeignKey(PreferredDepartmentFunction,on_delete=models.SET_NULL, null=True, blank=True, related_name='industry')
     total_experience = models.ForeignKey(Years, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
+    months = models.CharField(max_length=40,choices=Months_Choice,blank=True, null=True)
     current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='current_loaction')
     preferred_locations = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_location')
     notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, null=True,blank=True)  # Required
+    functional_area = models.ForeignKey(PreferredJobTitle,on_delete=models.SET_NULL, null=True, blank=True, related_name='functional_area')
 
 class Workexperience(models.Model):
     WORKPLACE_CHOICES = [
@@ -233,17 +248,23 @@ class PersonDetails(models.Model):
     Nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='person_details')
     i_am_specially_abled = models.BooleanField()
 
-class Languange(models.Model):
-    Languange_name = models.CharField(max_length=200)
+class Language(models.Model):
+    language_name = models.CharField(max_length=200)
 
 class Language_Page(models.Model):
     Proficiency_Choice = [
-        ('Expert','Expert'),
-        ('Beginner','Beginner'),
-        ('Proficient','Proficient')
+        ('Expert', 'Expert'),
+        ('Beginner', 'Beginner'),
+        ('Proficient', 'Proficient')
     ]
-    languange =models.ForeignKey(Languange, on_delete=models.SET_NULL,null=True, blank=True)
-    proficiency = models.CharField(max_length=100,choices = Proficiency_Choice,null=True,blank=True)
+    LanguageSkillChoice = [
+        ('Read', 'Read'),
+        ('Write', 'Write'),
+        ('Speak', 'Speak'),
+    ]
+    language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True, blank=True)
+    proficiency = models.CharField(max_length=100, choices=Proficiency_Choice, null=True, blank=True)
+    languageskill = models.CharField(max_length=100, choices=LanguageSkillChoice, null=True, blank=True)
 
 
 class Email_Push_Notifications(models.Model): 

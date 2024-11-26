@@ -146,7 +146,7 @@ class PersonDetailsSerializer(serializers.ModelSerializer):
 
 class LanguangeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Languange
+        model = Language
         fields =  "__all__"
 
 class Language_PageSerializer(serializers.ModelSerializer):
@@ -171,3 +171,8 @@ class SavedJobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavedJobs
         fields = ['user_id', 'job_id']
+        
+class YearsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Years
+        fields = "__all__"
