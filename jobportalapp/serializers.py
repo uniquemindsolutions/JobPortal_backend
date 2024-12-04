@@ -85,11 +85,49 @@ class JobViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobView
         fields = "__all__"
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields =  "__all__"
+
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields =  "__all__"
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields =  "__all__"
 
 class MyprofileSerializer(serializers.ModelSerializer):
+    country = CountrySerializer()
+    state = StateSerializer()
+    city = CitySerializer()
+
     class Meta:
         model = Myprofile
         fields = "__all__"
+
+    # Override create to handle nested data
+    def create(self, validated_data):
+        country_data = validated_data.pop('country')
+        state_data = validated_data.pop('state')
+        city_data = validated_data.pop('city')
+
+        # Get or create country
+        country, created = Country.objects.get_or_create(**country_data)
+
+        # Get or create state
+        state, created = State.objects.get_or_create(country=country, **state_data)
+
+        # Get or create city
+        city, created = City.objects.get_or_create(state=state, **city_data)
+
+        # Create profile with references to country, state, and city
+        profile = Myprofile.objects.create(country=country, state=state, city=city, **validated_data)
+
+        return profile
 
 class NewjobSerializer(serializers.ModelSerializer):
     class Meta:

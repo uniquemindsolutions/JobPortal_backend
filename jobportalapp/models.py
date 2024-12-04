@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django_countries.fields import CountryField
 # Create your models here.
 
 class TotalVisitorCount(models.Model):
@@ -39,35 +40,28 @@ class JobView(models.Model):
 
     def __str__(self):
         return self.get_job_title_display()
+class Country(models.Model):
+    name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
+class State(models.Model):
+    name = models.CharField(max_length=100)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='states')
+
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    name = models.CharField(max_length=100)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='cities')
+
+    def __str__(self):
+        return self.name
+        
 class Myprofile(models.Model):
-    Countries_Choices = [
-        ('India', 'India'),
-        ('Canada', 'Canada'),
-        ('America', 'America'),
-        ('Australia', 'Australia'),
-        ('United Kingdom', 'United Kingdom'),
-        ('Germany', 'Germany'),
-    ]
-    
-    City_Choices = [
-        ('Hyderabad', 'Hyderabad'),
-        ('Bangalore', 'Bangalore'),
-        ('Mumbai', 'Mumbai'),
-        ('Toronto', 'Toronto'),
-        ('New York', 'New York'),
-        ('London', 'London'),
-    ]
-    
-    State_Choices = [
-        ('Telangana', 'Telangana'),
-        ('Karnataka', 'Karnataka'),
-        ('Maharashtra', 'Maharashtra'),
-        ('Ontario', 'Ontario'),
-        ('New York', 'New York'),
-        ('California', 'California'),
-    ]
-    
+
     photo = models.ImageField(upload_to='Myprofile/Images')
     employee_Name = models.CharField(max_length=80, blank=True, null=True)
     website = models.URLField()
@@ -78,10 +72,10 @@ class Myprofile(models.Model):
     phone_number = models.CharField(max_length=10)
     about_company = models.TextField(max_length=160,blank=True, null=True)
     address = models.TextField(max_length=180,blank=True, null=True)
-    country = models.CharField(max_length=90, choices=Countries_Choices)
-    city = models.CharField(max_length=90, choices=City_Choices)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
     zip_code = models.IntegerField()
-    state = models.CharField(max_length=100, choices=State_Choices)
     map_location = models.CharField(max_length=100,blank=True, null=True)
 
 class Newjob(models.Model):

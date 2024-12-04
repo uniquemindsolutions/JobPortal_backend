@@ -58,10 +58,22 @@ class JobViewViewSet(viewsets.ModelViewSet):
 class MyprofileViewSet(viewsets.ModelViewSet):
     queryset = Myprofile.objects.all()
     serializer_class = MyprofileSerializer
-    
-    # Override the create method to restrict it to POST requests
+
+    # Override the create method if needed for additional logic
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+class StateViewSet(viewsets.ModelViewSet):
+    queryset = State.objects.all()
+    serializer_class = StateSerializer
+
+class CityViewSet(viewsets.ModelViewSet):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
 
 class Mynewjobviewset(viewsets.ModelViewSet):
     queryset = Newjob.objects.all()
