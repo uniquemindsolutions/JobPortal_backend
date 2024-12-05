@@ -68,6 +68,7 @@ class CitySerializer(serializers.ModelSerializer):
         fields =  "__all__"
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.ImageField(required=False, allow_null=True)  
     class Meta:
         model = UserProfile
         fields =  "__all__"
@@ -93,13 +94,9 @@ class InstituteSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class Education_DetailsSerializer(serializers.ModelSerializer):
-    passing_year = serializers.DateField(
-        format="%d-%m-%Y",  # Format for serialization (output)
-        input_formats=["%d-%m-%Y", "%Y-%m-%d"]  # Accept both DD-MM-YYYY and YYYY-MM-DD
-    )
     class Meta:
         model = Education_Details
-        fields = "_all_"
+        fields = "__all__"
 
 class PreferredDepartmentFunctionSerializer(serializers.ModelSerializer):
     class Meta:

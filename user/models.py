@@ -71,37 +71,38 @@ class UserProfile(models.Model):
     ]
     Months_Choice = [
         ('1 month', '1 month'),
-        ('2 month', '2 month'),
-        ('3 month', '3 month'),
-        ('4 month', '4 month'),
-        ('5 month', '5 month'),
-        ('6 month', '6 month'),
-        ('7 month', '7 month'),
-        ('8 month', '8 month'),
-        ('9 month', '9 month'),
-        ('10 month', '10 month'),
-        ('11 month', '11 month'),
-        ('12 month', '12 month')
+        ('2 months', '2 months'),
+        ('3 months', '3 months'),
+        ('4 months', '4 months'),
+        ('5 months', '5 months'),
+        ('6 months', '6 months'),
+        ('7 months', '7 months'),
+        ('8 months', '8 months'),
+        ('9 months', '9 months'),
+        ('10 months', '10 months'),
+        ('11 months', '11 months'),
     ]
     profile_photo = models.ImageField(upload_to='User/Profile/images',null=True,blank=True)
-    first_name = models.CharField(max_length=120,blank=True,null=True)
+    first_name = models.CharField(max_length=120)
     last_name = models.CharField(max_length=120,null=True,blank=True)
     email = models.EmailField(max_length=200)
     phone_number = models.CharField(max_length=10)
     resume = models.FileField(upload_to='User/Profile/Resume',null=True,blank=True)
     industry = models.ForeignKey(PreferredDepartmentFunction,on_delete=models.SET_NULL, null=True, blank=True, related_name='industry')
     total_experience = models.ForeignKey(Years, on_delete=models.SET_NULL, null=True, blank=True, related_name='user_profiles')
-    months = models.CharField(max_length=40,choices=Months_Choice,blank=True, null=True)
-    current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='current_loaction')
+    total_months = models.CharField(max_length=40,choices=Months_Choice,blank=True, null=True)
+    current_location = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, related_name='current_loaction')
     preferred_locations = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_location')
     notice_period = models.CharField(max_length=50, choices=NOTICE_PERIOD_CHOICES, null=True,blank=True)  # Required
     functional_area = models.ForeignKey(PreferredJobTitle,on_delete=models.SET_NULL, null=True, blank=True, related_name='functional_area')
-
+    current_company_name = models.CharField(max_length=100,blank=True, null=True)
+    
 class Workexperience(models.Model):
     WORKPLACE_CHOICES = [
         ('in_office', 'In-Office'),
         ('hybrid', 'Hybrid'),
         ('work_from_home', 'Work from Home'),
+        ('remote', 'Remote'),
     ]
     EMPLOYMENT_TYPE_CHOICES = [
         ('Full Time', 'Full Time'),
@@ -166,7 +167,7 @@ class Education_Details(models.Model):
     institute = models.CharField(max_length=200)
     grading_system = models.CharField(max_length=150, choices=Grading_System_Choice,null=True,blank=True)
     marks = models.CharField(max_length=120,null=True,blank=True)
-    passing_year = models.BigIntegerField(null=True)  
+    passing_year = models.DateField(null=True)  
     education_type = models.CharField(max_length=120, choices=Education_Type_Choice)
 
 class Job_Preferences(models.Model):

@@ -248,6 +248,30 @@ class PersonDetailsByIdView(APIView):
         else:
             return Response({'error': 'ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+class UserProfileByIdView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('id')  # Retrieve the 'id' from the request
+
+        if user_id:
+            try:
+                user = UserProfile.objects.get(id=user_id)
+                serializer = UserProfileSerializer(user, data=request.data, partial=True)  # Partial update
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)  # Return updated data
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except UserProfile.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            serializer = UserProfileSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()  # Save new user
+                return Response(serializer.data, status=status.HTTP_201_CREATED)  # Return new user data
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class LanguangeViewSet(viewsets.ModelViewSet):
     queryset = Language.objects.all()
     serializer_class = LanguangeSerializer
